@@ -1,68 +1,75 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.CRServo;
 
-public class RobotHardware() {
-    final public static double ONE_METER = 4500; // guess and check lmao
+public class RobotHardware {
+    // todo: fix these shitty constants. Will this still be a problem during mecanum wheels?
+
+    // pie in the sky: ML with camera
+    // coding for mecanum and linear extruder / claw
+    // consistent abstractions (turning, moving)
+    // anything else?
+    final public static double ONE_METER = 400; // guess and check lmao
 	final public static double ONE_CENTIMETER =  ONE_METER / 100;
-	final public static double FULL_ROBOTATION = 8000;
+	final public static double FULL_ROBOTATION = 240; // found by deriving the inverse sin of LMAO I'm just kidding guess and check
 	final public static double ONE_DEGREE = FULL_ROBOTATION / 360;
 
 
-    DcMotor left;
-    DcMotor right;
-    DcMotor tray1;
-    DcMotor tray2;
-    CRServo carousel;
+    public DcMotor left;
+    public DcMotor right;
+    public DcMotor rightTray;
+    public DcMotor leftTray;
+    public CRServo carousel;
 
-    RobotHardware(HardwareMap hardwareMap) {
+    public RobotHardware(HardwareMap hardwareMap) {
         left = hardwareMap.get(DcMotor.class, "left");
         right = hardwareMap.get(DcMotor.class, "right");
-        tray1 = hardwareMap.get(DcMotor.class, "tray1");
-        tray2 = hardwareMap.get(DcMotor.class, "tray2");
+        rightTray = hardwareMap.get(DcMotor.class, "rightTray");
+        leftTray = hardwareMap.get(DcMotor.class, "leftTray");
         carousel = hardwareMap.get(CRServo.class, "carousel");
 
         left.setDirection(DcMotor.Direction.FORWARD);
-        right.setDirection(DcMotor.Direction.FORWARD);
+        right.setDirection(DcMotor.Direction.REVERSE);
         // peat didn't set these
-        tray1.setDirection(DcMotor.Direction.FORWARD);
-        tray2.setDirection(DcMotor.Direction.FORWARD);
+        rightTray.setDirection(DcMotor.Direction.FORWARD);
+        leftTray.setDirection(DcMotor.Direction.FORWARD);
 
         left.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         right.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        tray1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        tray2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightTray.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        leftTray.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     // all degrees are 'shitty unit circle': 0 degrees is front facing, then go clockwise
-    // I'm going to worry about doing turns later... what do I look like, a math kid?
+    // I'm going to worry about doing turns later... what do I look like, a math kid? trans. DON'T DO TURNS
     // power + turn, power - turn
-    move(double distance, double turn, double power) {
-        int leftPosition = robot.left.getCurrentPosition() + (int)(distance * ONE_CENTIMETER + turn * ONE_DEGREE);
-        int rightPosition = robot.right.getCurrentPosition() + (int)(distance * ONE_CENTIMETER - turn * ONE_DEGREE);
+    void move(double distance, double turn, double power) {
+        int leftPosition = left.getCurrentPosition() + (int)(distance * ONE_CENTIMETER - turn * ONE_DEGREE);
+        int rightPosition = right.getCurrentPosition() + (int)(distance * ONE_CENTIMETER + turn * ONE_DEGREE);
 
 
-        robot.left.setTargetPosition(leftPosition);
-        robot.right.setTargetPosition(rightPosition);
+        left.setTargetPosition(leftPosition);
+        right.setTargetPosition(rightPosition);
 
-        robot.left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        robot.left.setPower(power);
-        robot.right.setPower(power);
+        left.setPower(power);
+        right.setPower(power);
 
-        while(robot.left.isBusy() && robot.right.isBusy()); // I think this is right? curse code duplication!
+        while(left.isBusy() && right.isBusy()); // I think this is right? curse code duplication!
 
-        robot.left.setPower(0);
-        robot.right.setPower(0);
+        left.setPower(0);
+        right.setPower(0);
 
-        robot.left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.right.setMode(DcMotor.RunMode.RUN_USING_ENCODER;
+        left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
-    turn(double deg, double power) {
+    void turn(double deg, double power) {
         move(0, deg, power);
     }
 }

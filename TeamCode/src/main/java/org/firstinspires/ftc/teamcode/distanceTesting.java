@@ -21,20 +21,19 @@ public class distanceTesting extends LinearOpMode {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
-        robot = new RobotHardware();
+        robot = new RobotHardware(hardwareMap);
 
         waitForStart();
         runtime.reset();
 
         // autonomous start
-        robot.move(100, 0, 1); // 1 meter
-        telemetry.addData("Traveled 1m forward");
+        //robot.move(70, 0, 0.1); // 1 meter
+        robot.turn(360, 0.05);
+        //telemetry.addData("Traveled 1m forwar
+        //telemetry.addData("Turned 360deg in place");
 
-        robot.turn(360);
-        telemetry.addData("Turned 360deg in place");
 
-
-        telemetry.addData("Finished");
+        //telemetry.addData("Finished");
         telemetry.update();
     }
 }

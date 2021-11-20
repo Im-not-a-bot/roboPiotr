@@ -28,16 +28,9 @@ package org.firstinspires.ftc.teamcode;
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import com.qualcomm.hardware.motors.RevRoboticsCoreHexMotor;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
-
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 
 /**
@@ -82,17 +75,19 @@ public class Contest1driver extends LinearOpMode {
             // - This uses basic math to combine motions and is easier to drive straight.
             double vertical = -gamepad1.left_stick_y;
             double turning = -gamepad1.left_stick_x;
-            double tray1power = gamepad1.right_stick_x; // wtf does this even mean? does tray1 raise the 'base' and tray2 raises the 'bridge'? 
-            double tray2power = gamepad1.right_stick_y;
+            double tray1power = -gamepad1.right_stick_y; // wtf does this even mean? does tray1 raise the 'base' and tray2 raises the 'bridge'?
+            double tray2power = -gamepad1.right_stick_y - gamepad1.right_stick_x;
 
 
-            robot.left.setPower(-vertical+turning);
-            robot.right.setPower(vertical+turning);
-            robot.tray1.setPower(tray1power);
-            robot.tray2.setPower(tray2power);
-            
-            if (gamepad1.dpad_right) {
+            robot.left.setPower(vertical + turning);
+            robot.right.setPower(vertical - turning);
+            robot.rightTray.setPower(tray1power);
+            robot.leftTray.setPower(tray2power);
+
+            if (gamepad1.b) {
                 robot.carousel.setPower(1);
+            } else if (gamepad1.x) {
+                robot.carousel.setPower(-1);
             } else {
                 robot.carousel.setPower(0);
             }
