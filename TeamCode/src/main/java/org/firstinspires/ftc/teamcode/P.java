@@ -38,15 +38,16 @@ public class P extends LinearOpMode {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
-        //
-//        R = hardwareMap.get(DcMotor.class, "R");
-//        L = hardwareMap.get(DcMotor.class, "L");
-//
-//        RS = hardwareMap.get(Servo.class, "RS");
-//        LS = hardwareMap.get(Servo.class, "LS");
-//        //servo.setPosition(0);
-//
-//        p=new Point(0,0);
+        //on ctrl hub
+        FR  = hardwareMap.get(DcMotor.class, "FR");
+        FL = hardwareMap.get(DcMotor.class, "FL");
+        BR = hardwareMap.get(DcMotor.class, "BR");
+        BL = hardwareMap.get(DcMotor.class, "BL");
+        armEnd = hardwareMap.get(Servo.class,"servo");
+
+        //on expansion hub
+        arm = hardwareMap.get(DcMotor.class, "arm");
+        sweeper = hardwareMap.get(DcMotor.class, "sweeper");
 
         // runs the moment  is initialized
         waitForStart();
