@@ -26,6 +26,7 @@ public class distanceTesting extends LinearOpMode {
         waitForStart();
         runtime.reset();
 
+        // this can stay, but has to be changed for mecanum (i.e. new move method uses deg and magnitude)
         // autonomous start
         //robot.move(70, 0, 0.1); // 1 meter
         robot.turn(360, 0.05);

@@ -101,7 +101,7 @@ public class mecarm extends LinearOpMode {
         // runs after driver presses play
         while (opModeIsActive()) {
                 motors();
-                if(gamepad1.x){arm.setTargetPosition(arm.getCurrentPosition());arm.setPower(.01);}else{arm.setPower(10);}
+                if(gamepad1.x){arm.setTargetPosition(arm.getCurrentPosition());arm.setPower(.01);}else{arm.setPower(1);}
 
             if (gamepad1.dpad_right) {arm.setTargetPosition(arm.getTargetPosition()+1);}
             if (gamepad1.dpad_left) {arm.setTargetPosition(arm.getTargetPosition()-1);}
