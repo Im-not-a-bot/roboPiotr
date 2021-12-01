@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.robot.Robot;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
@@ -21,12 +22,7 @@ public class mecarm extends LinearOpMode {
     // REMEMBER!! the robot is SIDEWAYS. The front is what would normally be right
     // naming is based on new orientation!
 
-    public DcMotor FR;
-    public DcMotor FL;
-    public DcMotor BR;
-    public DcMotor BL;
-
-    public DcMotor arm;
+    RobotHardware robot;
     //
 //    public DcMotor R;
 //    public DcMotor L;
@@ -48,12 +44,7 @@ public class mecarm extends LinearOpMode {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
-        FR  = hardwareMap.get(DcMotor.class, "FR");
-        FL = hardwareMap.get(DcMotor.class, "FL");
-        BR = hardwareMap.get(DcMotor.class, "BR");
-        BL = hardwareMap.get(DcMotor.class, "BL");
-        arm = hardwareMap.get(DcMotor.class, "arm");
-
+        robot = new RobotHardware(hardwareMap);
         //
 //        R = hardwareMap.get(DcMotor.class, "R");
 //        L = hardwareMap.get(DcMotor.class, "L");
@@ -68,50 +59,25 @@ public class mecarm extends LinearOpMode {
         waitForStart();
         runtime.reset();
 
-        //resets encoders
-        FR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        FL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        BR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        BL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-
-        // makes motors "stiff" when unpowered
-        FR.setZeroPowerBehavior(BRAKE);
-        FL.setZeroPowerBehavior(BRAKE);
-        BR.setZeroPowerBehavior(BRAKE);
-        BL.setZeroPowerBehavior(BRAKE);
-
-        arm.setZeroPowerBehavior(BRAKE);
-
-        //makes accuracy remotely possible
-        FR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        FL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        BR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        BL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        //makes running to angle possible
-
-        arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        arm.setTargetPosition(arm.getCurrentPosition());
-        arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-
         // runs after driver presses play
         while (opModeIsActive()) {
                 motors();
-                if(gamepad1.x){arm.setTargetPosition(arm.getCurrentPosition());arm.setPower(.01);}else{arm.setPower(1);}
+                if(gamepad1.x){
+                    robot.arm.setTargetPosition(robot.arm.getCurrentPosition());
+                    robot.arm.setPower(.01);
+                } else {
+                    robot.arm.setPower(0);
+                }
 
-            if (gamepad1.dpad_right) {arm.setTargetPosition(arm.getTargetPosition()+1);}
-            if (gamepad1.dpad_left) {arm.setTargetPosition(arm.getTargetPosition()-1);}
+            if (gamepad1.dpad_right) robot.arm.setTargetPosition(robot.arm.getTargetPosition()+1);
+            if (gamepad1.dpad_left) robot.arm.setTargetPosition(robot.arm.getTargetPosition()-1);
 
             telemetry.addLine(//"UT (ms)"+  ((double)(System.nanoTime()-pt)/1000000)+"\n"+
                                  "motor position:" + "\n"+
-                                 "FR: "+FR.getCurrentPosition()+"\n" +
-                                 "FL: "+FL.getCurrentPosition()+"\n" +
-                                 "BR: "+BR.getCurrentPosition()+"\n" +
-                                 "BL: "+BL.getCurrentPosition()+"\n" +
+                                 "FR: "+robot.FR.getCurrentPosition()+"\n" +
+                                 "FL: "+robot.FL.getCurrentPosition()+"\n" +
+                                 "BR: "+robot.BR.getCurrentPosition()+"\n" +
+                                 "BL: "+robot.BL.getCurrentPosition()+"\n" +
                                  "\n"
 //                                 "arm position:" +"\n"+
 //                                 "Target point "+p+"\n"+
@@ -125,18 +91,11 @@ public class mecarm extends LinearOpMode {
         }
     }
 
-    void motors(){
-
-        FR.setDirection(DcMotorSimple.Direction.REVERSE);
-        FL.setDirection(DcMotorSimple.Direction.FORWARD);
-        BR.setDirection(DcMotorSimple.Direction.FORWARD);
-        BL.setDirection(DcMotorSimple.Direction.REVERSE);
-
+    void motors() {
         //complex trial-and-error stuff
-        FR.setPower(Range.clip(-gamepad1.left_stick_y-gamepad1.left_stick_x-.75*gamepad1.right_stick_x,-1,1));
-        FL.setPower(Range.clip(-gamepad1.left_stick_y+gamepad1.left_stick_x+.75*gamepad1.right_stick_x,-1,1));
-        BR.setPower(Range.clip(-gamepad1.left_stick_y+gamepad1.left_stick_x-.75*gamepad1.right_stick_x,-1,1));
-        BL.setPower(Range.clip(-gamepad1.left_stick_y-gamepad1.left_stick_x+.75*gamepad1.right_stick_x,-1,1));
-
+        robot.FR.setPower(Range.clip(-gamepad1.left_stick_y-gamepad1.left_stick_x-.75*gamepad1.right_stick_x,-1,1));
+        robot.FL.setPower(Range.clip(-gamepad1.left_stick_y+gamepad1.left_stick_x+.75*gamepad1.right_stick_x,-1,1));
+        robot.BR.setPower(Range.clip(-gamepad1.left_stick_y+gamepad1.left_stick_x-.75*gamepad1.right_stick_x,-1,1));
+        robot.BL.setPower(Range.clip(-gamepad1.left_stick_y-gamepad1.left_stick_x+.75*gamepad1.right_stick_x,-1,1));
     }
 }
