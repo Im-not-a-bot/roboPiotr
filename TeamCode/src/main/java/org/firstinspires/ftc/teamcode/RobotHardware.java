@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.Servo;
 
 public class RobotHardware {
     // todo: fix these shitty constants. Will this still be a problem during mecanum wheels?
@@ -26,6 +27,9 @@ public class RobotHardware {
     public DcMotor BL;
 
     public DcMotor arm;
+    public DcMotor sweeper;
+    public DcMotor carousel;
+    public Servo armEnd;
 
     public RobotHardware(HardwareMap hardwareMap) {
         FR  = hardwareMap.get(DcMotor.class, "FR");
@@ -33,46 +37,47 @@ public class RobotHardware {
         BR = hardwareMap.get(DcMotor.class, "BR");
         BL = hardwareMap.get(DcMotor.class, "BL");
         arm = hardwareMap.get(DcMotor.class, "arm");
+        sweeper = hardwareMap.get(DcMotor.class,"sweeper");
+        armEnd = hardwareMap.get(Servo.class,"servo");
+        carousel = hardwareMap.get(DcMotor.class,"carousel");
 
         FR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         FL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         BR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         BL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
+        sweeper.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        carousel.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         FR.setZeroPowerBehavior(BRAKE);
         FL.setZeroPowerBehavior(BRAKE);
         BR.setZeroPowerBehavior(BRAKE);
         BL.setZeroPowerBehavior(BRAKE);
-
         arm.setZeroPowerBehavior(BRAKE);
+        sweeper.setZeroPowerBehavior(BRAKE);
+        carousel.setZeroPowerBehavior(BRAKE);
 
         //makes accuracy remotely possible
         FR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         FL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         BR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         BL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        //makes running to angle possible
-
+        sweeper.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        arm.setTargetPosition(arm.getCurrentPosition());
-        arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        carousel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
 
         FR.setDirection(DcMotorSimple.Direction.REVERSE);
         FL.setDirection(DcMotorSimple.Direction.FORWARD);
-        BR.setDirection(DcMotorSimple.Direction.FORWARD);
-        BL.setDirection(DcMotorSimple.Direction.REVERSE);
+        BR.setDirection(DcMotorSimple.Direction.REVERSE);
+        BL.setDirection(DcMotorSimple.Direction.FORWARD);
+        arm.setDirection(DcMotorSimple.Direction.FORWARD);
+        sweeper.setDirection(DcMotorSimple.Direction.FORWARD);
+        carousel.setDirection(DcMotorSimple.Direction.FORWARD);
 
 
     }
 
-    // all degrees are 'shitty unit circle': 0 degrees is front facing, then go clockwise
-    // I'm going to worry about doing turns later... what do I look like, a math kid? trans. DON'T DO TURNS
-    // power + turn, power - turn
     /*
     void move(double distance, double turn, double power) {
         int leftPosition = left.getCurrentPosition() + (int)(distance * ONE_CENTIMETER - turn * ONE_DEGREE);
