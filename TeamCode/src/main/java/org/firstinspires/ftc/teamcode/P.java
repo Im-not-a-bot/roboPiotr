@@ -28,10 +28,8 @@ public class P extends LinearOpMode {
     public DcMotor BL;
 
     public DcMotor carousel;
-
     public DcMotor arm;
     public Servo armEnd;
-
     public DcMotor sweeper;
 
     public long pt;
