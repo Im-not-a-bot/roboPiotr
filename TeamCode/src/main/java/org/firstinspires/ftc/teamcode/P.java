@@ -27,6 +27,8 @@ public class P extends LinearOpMode {
     public DcMotor BR;
     public DcMotor BL;
 
+    public DcMotor carousel;
+
     public DcMotor arm;
     public Servo armEnd;
 
@@ -48,6 +50,7 @@ public class P extends LinearOpMode {
         //on expansion hub
         arm = hardwareMap.get(DcMotor.class, "arm");
         sweeper = hardwareMap.get(DcMotor.class, "sweeper");
+        carousel = hardwareMap.get(DcMotor.class, "carousel");
 
         // runs the moment  is initialized
         waitForStart();
@@ -64,6 +67,8 @@ public class P extends LinearOpMode {
             if (gamepad1.dpad_up){armEnd.setPosition(0);}
 
             if(gamepad1.a){sweeper.setPower(-1);}else{sweeper.setPower(0);}
+            if(gamepad1.x){carousel.setPower(-1);}else{carousel.setPower(0);}
+            if(gamepad1.a){carousel.setPower(1);}else{carousel.setPower(0);}
 
             telemetry.addLine(
                     "UpS (ms)"+  1000/((double)(System.nanoTime()-pt)/1000000)+"\n"+
