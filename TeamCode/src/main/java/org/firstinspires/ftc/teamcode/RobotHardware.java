@@ -62,15 +62,15 @@ public class RobotHardware {
         FL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         BR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         BL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        sweeper.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        sweeper.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        carousel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        carousel.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
 
-        FR.setDirection(DcMotorSimple.Direction.REVERSE);
-        FL.setDirection(DcMotorSimple.Direction.FORWARD);
-        BR.setDirection(DcMotorSimple.Direction.REVERSE);
-        BL.setDirection(DcMotorSimple.Direction.FORWARD);
+        FR.setDirection(DcMotorSimple.Direction.FORWARD);
+        FL.setDirection(DcMotorSimple.Direction.REVERSE);
+        BR.setDirection(DcMotorSimple.Direction.FORWARD);
+        BL.setDirection(DcMotorSimple.Direction.REVERSE);
         arm.setDirection(DcMotorSimple.Direction.FORWARD);
         sweeper.setDirection(DcMotorSimple.Direction.FORWARD);
         carousel.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -80,26 +80,7 @@ public class RobotHardware {
 
     /*
     void move(double distance, double turn, double power) {
-        int leftPosition = left.getCurrentPosition() + (int)(distance * ONE_CENTIMETER - turn * ONE_DEGREE);
-        int rightPosition = right.getCurrentPosition() + (int)(distance * ONE_CENTIMETER + turn * ONE_DEGREE);
 
-
-        left.setTargetPosition(leftPosition);
-        right.setTargetPosition(rightPosition);
-
-        left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        left.setPower(power);
-        right.setPower(power);
-
-        while(left.isBusy() && right.isBusy()); // I think this is right? curse code duplication!
-
-        left.setPower(0);
-        right.setPower(0);
-
-        left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     void turn(double deg, double power) {

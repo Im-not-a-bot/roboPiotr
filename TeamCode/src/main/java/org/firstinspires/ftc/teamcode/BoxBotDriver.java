@@ -59,8 +59,8 @@ public class BoxBotDriver extends LinearOpMode {
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
 
-            double horizontal = -gamepad1.left_stick_y;
             double vertical = gamepad1.left_stick_x;
+            double horizontal = -gamepad1.left_stick_y;
             double turn = gamepad1.right_stick_x;
             robot.FL.setPower(Range.clip(vertical+horizontal+turn,-1,1));
             robot.FR.setPower(Range.clip(vertical-horizontal-turn,-1,1));
@@ -72,15 +72,16 @@ public class BoxBotDriver extends LinearOpMode {
             else if (gamepad1.dpad_right) robot.arm.setPower(0.2);
             else robot.arm.setPower(0);
 
-            if (gamepad1.a) robot.carousel.setPower(1);
+            if (gamepad1.left_bumper) robot.carousel.setPower(1);
+            else if (gamepad1.right_bumper) robot.carousel.setPower(-1);
             else robot.carousel.setPower(0);
 
             if (gamepad1.b) robot.sweeper.setPower(1);
             else robot.sweeper.setPower(0);
 
-            //if (gamepad1.x) robot.armEnd.setPower(1);
-            //else if (gamepad1.y) robot.armEnd.setPower(-1);
-            //else robot.armEnd.
+            if (gamepad1.x) robot.armEnd.setPosition(0.75);
+            else if (gamepad1.y) robot.armEnd.setPosition(-0.75);
+            else robot.armEnd.setPosition(0);
 
             // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Run Time: " + runtime.toString());
