@@ -47,6 +47,9 @@ public class BoxBotDriver extends LinearOpMode {
 
     @Override
     public void runOpMode() {
+
+        int inc=0;
+
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
@@ -59,7 +62,7 @@ public class BoxBotDriver extends LinearOpMode {
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
 
-            double vertical = gamepad1.left_stick_x;
+            double vertical = -gamepad1.left_stick_x;
             double horizontal = -gamepad1.left_stick_y;
             double turn = gamepad1.right_stick_x;
             robot.FL.setPower(Range.clip(vertical+horizontal+turn,-1,1));
@@ -67,10 +70,11 @@ public class BoxBotDriver extends LinearOpMode {
             robot.BL.setPower(Range.clip(vertical-horizontal+turn,-1,1));
             robot.BR.setPower(Range.clip(vertical+horizontal-turn,-1,1));
 
+            robot.arm.setTargetPosition(inc);
+            robot.arm.setPower(1);
+            if (gamepad1.dpad_left) inc--;
+            else if (gamepad1.dpad_right) inc++;
 
-            if (gamepad1.dpad_left) robot.arm.setPower(-0.2);
-            else if (gamepad1.dpad_right) robot.arm.setPower(0.2);
-            else robot.arm.setPower(0);
 
             if (gamepad1.left_bumper) robot.carousel.setPower(1);
             else if (gamepad1.right_bumper) robot.carousel.setPower(-1);

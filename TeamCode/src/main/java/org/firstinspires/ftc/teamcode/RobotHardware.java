@@ -57,13 +57,15 @@ public class RobotHardware {
         sweeper.setZeroPowerBehavior(BRAKE);
         carousel.setZeroPowerBehavior(BRAKE);
 
+        arm.setTargetPosition(0);
+
         //makes accuracy remotely possible
         FR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         FL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         BR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         BL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         sweeper.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         carousel.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
 
