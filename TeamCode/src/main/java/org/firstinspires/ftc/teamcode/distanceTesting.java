@@ -28,8 +28,18 @@ public class distanceTesting extends LinearOpMode {
 
         // this can stay, but has to be changed for mecanum (i.e. new move method uses deg and magnitude)
         // autonomous start
-        //robot.move(70, 0, 0.1); // 1 meter
-        //robot.turn(360, 0.05);
+        telemetry.addData("Mode", "ENCODER DRIVE");
+        telemetry.update();
+        robot.encoderDrive(0, 100, 0, 0.1); // 1 meter
+        robot.encoderDrive(10, 10, 360, 0.1); // turn
+        try{
+           Thread.sleep(3000);
+       } catch (Exception e){
+           e.printStackTrace();
+       }
+        telemetry.addData("Mode", "STRAFE");
+        telemetry.update();
+        robot.strafe(100, -Math.PI / 2, 0.1);
         //telemetry.addData("Traveled 1m forwar
         //telemetry.addData("Turned 360deg in place");
 
