@@ -71,7 +71,10 @@ public class BoxBotDriver extends LinearOpMode {
             robot.BR.setPower(Range.clip(vertical+horizontal-turn,-1,1));
 
             robot.arm.setTargetPosition(inc);
+            robot.arm2.setTargetPosition(-inc);
             robot.arm.setPower(1);
+            robot.arm2.setPower(1);
+
             if (gamepad1.dpad_left) inc--;
             else if (gamepad1.dpad_right) inc++;
 
@@ -90,7 +93,8 @@ public class BoxBotDriver extends LinearOpMode {
             // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.addData("Wheel Power", "FL (%.2f), FR (%.2f), BL (%.2f), BR (%.2f)", robot.FL.getPower(), robot.FR.getPower(),robot.BL.getPower(),robot.BR.getPower());
-            telemetry.addData("Arm Power", robot.arm.getPower());
+            telemetry.addData("Arm target pos", inc);
+            telemetry.addData("Arm actual pos", robot.arm.getCurrentPosition());
             telemetry.addData("Carousel Power", robot.carousel.getPower());
             telemetry.addData("Sweeper Power", robot.sweeper.getPower());
             telemetry.update();
