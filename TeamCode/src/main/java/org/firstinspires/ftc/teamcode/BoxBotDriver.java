@@ -40,7 +40,6 @@ import com.qualcomm.robotcore.util.Range;
 
 
 @TeleOp(name="Boxy Driver Op", group="Linear Opmode")
-//@Disabled
 public class BoxBotDriver extends LinearOpMode {
 
     private ElapsedTime runtime = new ElapsedTime();
@@ -70,13 +69,23 @@ public class BoxBotDriver extends LinearOpMode {
             robot.BL.setPower(Range.clip(vertical-horizontal+turn,-1,1));
             robot.BR.setPower(Range.clip(vertical+horizontal-turn,-1,1));
 
-            robot.arm.setTargetPosition(inc);
-            robot.arm2.setTargetPosition(-inc);
-            robot.arm.setPower(1);
-            robot.arm2.setPower(1);
 
-            if (gamepad1.dpad_left) inc--;
-            else if (gamepad1.dpad_right) inc++;
+
+
+            if (gamepad1.dpad_left){inc--;
+                robot.arm.setPower(0);
+                robot.arm2.setPower(0);
+                robot.arm.setTargetPosition(inc);
+                robot.arm2.setTargetPosition(-inc);
+                robot.arm.setPower(1);
+                robot.arm2.setPower(1);}
+            else if (gamepad1.dpad_right){inc++;
+                robot.arm.setPower(0);
+                robot.arm2.setPower(0);
+                robot.arm.setTargetPosition(inc);
+                robot.arm2.setTargetPosition(-inc);
+                robot.arm.setPower(1);
+                robot.arm2.setPower(1);}
 
 
             if (gamepad1.left_bumper) robot.carousel.setPower(1);
