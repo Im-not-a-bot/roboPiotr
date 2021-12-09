@@ -83,15 +83,48 @@ public class RobotHardware {
         arm2.setDirection(DcMotorSimple.Direction.FORWARD);
         sweeper.setDirection(DcMotorSimple.Direction.FORWARD);
         carousel.setDirection(DcMotorSimple.Direction.FORWARD);
-
-
     }
 
+    void move(double distanceX, double distanceY, double turn, double power) {
+        int frontLeftPosition = (int) (FL.getCurrentPosition() + ONE_CENTIMETER * distanceY - ONE_CENTIMETER * distanceX + ONE_DEGREE * (turn-90)); // if this doesn't work, change signs on distanceX and distanceY
+        int frontRightPosition = (int) (FR.getCurrentPosition() + ONE_CENTIMETER * distanceY + ONE_CENTIMETER * distanceX - ONE_DEGREE * (turn-90));
+        int backLeftPosition = (int) (BL.getCurrentPosition() + ONE_CENTIMETER * distanceY + ONE_CENTIMETER * distanceX + ONE_DEGREE * (turn-90));
+        int backRightPosition = (int) (BR.getCurrentPosition() + ONE_CENTIMETER * distanceY - ONE_CENTIMETER * distanceX - ONE_DEGREE * (turn-90));
+
+        FL.setTargetPosition(frontLeftPosition);
+        FR.setTargetPosition(frontRightPosition);
+        BL.setTargetPosition(backLeftPosition);
+        BR.setTargetPosition(backRightPosition);
+
+        FL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        FR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        BL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        BR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        FL.setPower(power);
+        FR.setPower(power);
+        BL.setPower(power);
+        BR.setPower(power);
+
+        while (FL.isBusy() && FR.isBusy() && BL.isBusy() && BR.isBusy()) {
+            /*
+            telemetry.addData("Target Encoders", "FL (%d), FR (%d), BL (%d), BR (%d)", frontLeftPosition, frontRightPosition, backLeftPosition, backRightPosition);
+            telemetry.addData("Current Encoders", "FL (%d), FR (%d), BL (%d), BR (%d)", FL.getCurrentPosition(), FR.getCurrentPosition(), BL.getCurrentPosition(), BR.getCurrentPosition());
+            telemetry.update();
+            ssshhhhhh */
+        }
+
+        FL.setPower(0);
+        FR.setPower(0);
+        BL.setPower(0);
+        BR.setPower(0);
+
+        FL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        FR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        BL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        BR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
     /*
-    void move(double distance, double turn, double power) {
-
-    }
-
     void turn(double deg, double power) {
         move(0, deg, power);
     }
