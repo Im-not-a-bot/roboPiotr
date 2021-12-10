@@ -73,15 +73,11 @@ public class BoxBotDriver extends LinearOpMode {
 
 
             if (gamepad1.dpad_left){inc--;
-                robot.arm.setPower(0);
-                robot.arm2.setPower(0);
                 robot.arm.setTargetPosition(inc);
                 robot.arm2.setTargetPosition(-inc);
                 robot.arm.setPower(1);
                 robot.arm2.setPower(1);}
             else if (gamepad1.dpad_right){inc++;
-                robot.arm.setPower(0);
-                robot.arm2.setPower(0);
                 robot.arm.setTargetPosition(inc);
                 robot.arm2.setTargetPosition(-inc);
                 robot.arm.setPower(1);

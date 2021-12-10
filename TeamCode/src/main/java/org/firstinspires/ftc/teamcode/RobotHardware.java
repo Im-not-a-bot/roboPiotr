@@ -30,7 +30,7 @@ public class RobotHardware {
     final public static double ONE_DEGREE = FULL_ROBOTATION / 360;
 
     final public static int CM=0;
-    final public static int IN=4;
+    final public static int IN=40;
     final public static int FT=48;
     final public static int M=0;
 
