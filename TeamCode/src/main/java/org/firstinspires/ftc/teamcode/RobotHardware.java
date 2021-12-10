@@ -30,8 +30,8 @@ public class RobotHardware {
     final public static double ONE_DEGREE = FULL_ROBOTATION / 360;
 
     final public static int CM=0;
-    final public static int IN=0;
-    final public static int FT=100;
+    final public static int IN=400;
+    final public static int FT=4800;
     final public static int M=0;
 
     final static double MAX_VELOCITY = (ONE_CENTIMETER * 12) / (2 * Math.sqrt(2));

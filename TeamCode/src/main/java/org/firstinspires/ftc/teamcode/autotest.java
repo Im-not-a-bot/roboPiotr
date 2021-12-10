@@ -21,7 +21,7 @@ public class autotest extends LinearOpMode {
         waitForStart();
 
         r=new RobotHardware(hardwareMap);
-        r.move(0,10,0,r.FT);
+        r.move(0,10,0,r.IN);
 
         stop();
     }
