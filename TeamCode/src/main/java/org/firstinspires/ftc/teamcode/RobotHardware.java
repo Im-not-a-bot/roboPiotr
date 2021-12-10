@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode;
 
 import static com.qualcomm.robotcore.hardware.DcMotor.ZeroPowerBehavior.BRAKE;
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
+
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -11,15 +13,26 @@ import com.qualcomm.robotcore.util.Range;
 
 public class RobotHardware {
     // todo: fix these shitty constants. Will this still be a problem during mecanum wheels?
+    // i sure hope not! -Peat
 
     // pie in the sky: ML with camera
+    // ^^ ok george, but i might get my lazy ass to work over break
+
     // coding for mecanum and linear extruder / claw
     // consistent abstractions (turning, moving)
     // anything else?
+
+    // ^^ yes. there is a definite lack of shitty variable names such as "beans"
+
     final public static double ONE_METER = 400; // guess and check lmao
     final public static double ONE_CENTIMETER =  ONE_METER / 100;
     final public static double FULL_ROBOTATION = 240; // found by deriving the inverse sin of LMAO I'm just kidding guess and check
     final public static double ONE_DEGREE = FULL_ROBOTATION / 360;
+
+    final public static int CM=0;
+    final public static int IN=0;
+    final public static int FT=100;
+    final public static int M=0;
 
     final static double MAX_VELOCITY = (ONE_CENTIMETER * 12) / (2 * Math.sqrt(2));
 
@@ -58,8 +71,8 @@ public class RobotHardware {
         FL.setZeroPowerBehavior(BRAKE);
         BR.setZeroPowerBehavior(BRAKE);
         BL.setZeroPowerBehavior(BRAKE);
-        arm.setZeroPowerBehavior(BRAKE);
-        arm2.setZeroPowerBehavior(BRAKE);
+        //arm.setZeroPowerBehavior(BRAKE);
+        //arm2.setZeroPowerBehavior(BRAKE);
         sweeper.setZeroPowerBehavior(BRAKE);
         carousel.setZeroPowerBehavior(BRAKE);
 
@@ -114,6 +127,7 @@ public class RobotHardware {
             telemetry.addData("Current Encoders", "FL (%d), FR (%d), BL (%d), BR (%d)", FL.getCurrentPosition(), FR.getCurrentPosition(), BL.getCurrentPosition(), BR.getCurrentPosition());
             telemetry.update();
             ssshhhhhh */
+            //lol
         }
 
         FL.setPower(0);
@@ -126,6 +140,30 @@ public class RobotHardware {
         BL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         BR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
+
+
+    public void move(double x, double y, double turn, int unit){
+        FL.setTargetPosition((int)Range.clip(y+x+turn,-1,1));
+        FR.setTargetPosition((int)Range.clip(y-x-turn,-1,1));
+        BL.setTargetPosition((int)Range.clip(y-x+turn,-1,1));
+        BR.setTargetPosition((int)Range.clip(y+x-turn,-1,1));
+
+        FL.setPower(1);
+        FR.setPower(1);
+        BL.setPower(1);
+        BR.setPower(1);
+
+        while (FL.isBusy() && FR.isBusy() && BL.isBusy() && BR.isBusy()) {
+            telemetry.addLine("motors busy");
+            telemetry.update();
+        }
+
+        FL.setPower(0);
+        FR.setPower(0);
+        BL.setPower(0);
+        BR.setPower(0);
+    }
+
     // encoderDrive, but shitty^TM
     public void strafe(int cm, double rd, double pow) {
         rd %= (2 * Math.PI);
