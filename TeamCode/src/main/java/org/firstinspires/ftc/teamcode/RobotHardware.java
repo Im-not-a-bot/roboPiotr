@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.Range;
 
 public class RobotHardware {
     // todo: fix these shitty constants. Will this still be a problem during mecanum wheels?
@@ -20,6 +21,7 @@ public class RobotHardware {
     final public static double FULL_ROBOTATION = 240; // found by deriving the inverse sin of LMAO I'm just kidding guess and check
     final public static double ONE_DEGREE = FULL_ROBOTATION / 360;
 
+    final static double MAX_VELOCITY = (ONE_CENTIMETER * 12) / (2 * Math.sqrt(2));
 
     public DcMotor FR;
     public DcMotor FL;
@@ -85,7 +87,7 @@ public class RobotHardware {
         carousel.setDirection(DcMotorSimple.Direction.FORWARD);
     }
 
-    void move(double distanceX, double distanceY, double turn, double power) {
+    public void encoderDrive(double distanceX, double distanceY, double turn, double power) {
         int frontLeftPosition = (int) (FL.getCurrentPosition() + ONE_CENTIMETER * distanceY - ONE_CENTIMETER * distanceX + ONE_DEGREE * (turn-90)); // if this doesn't work, change signs on distanceX and distanceY
         int frontRightPosition = (int) (FR.getCurrentPosition() + ONE_CENTIMETER * distanceY + ONE_CENTIMETER * distanceX - ONE_DEGREE * (turn-90));
         int backLeftPosition = (int) (BL.getCurrentPosition() + ONE_CENTIMETER * distanceY + ONE_CENTIMETER * distanceX + ONE_DEGREE * (turn-90));
@@ -123,6 +125,64 @@ public class RobotHardware {
         FR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         BL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         BR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
+    // encoderDrive, but shitty^TM
+    public void strafe(int cm, double rd, double pow) {
+        rd %= (2 * Math.PI);
+        double x = Math.cos(rd); // trig functions take radians
+        double y = Math.sin(rd);
+
+        double frontLeftPower = Range.clip(y + x, -1 ,1); // don't think we need turn if we just need to strafe
+        double frontRightPower = Range.clip(y - x, -1, 1);
+        double backLeftPower = Range.clip(y - x, -1, 1);
+        double backRightPower = Range.clip(y + x, -1, 1);
+
+        if (Math.abs(frontLeftPower) > 1 || Math.abs(backLeftPower) > 1 || Math.abs(frontRightPower) > 1 || Math.abs(backRightPower) > 1 ) {
+            // Find the largest power
+            double max;
+            max = Math.max(Math.abs(frontLeftPower), Math.abs(backLeftPower));
+            max = Math.max(Math.abs(frontRightPower), max);
+            max = Math.max(Math.abs(backRightPower), max);
+
+            // Divide everything by max (it's positive so we don't need to worry
+            // about signs)
+            frontLeftPower *= pow/max; // If you don't wanna go vrooom vroom
+            backLeftPower *= pow/max;
+            frontRightPower *= pow/max;
+            backRightPower *= pow/max;
+        }
+
+        rd = (rd <= Math.PI) ? rd : rd - Math.PI; // this is because I'm bad at math and equation below works for 0 <= x <= pi
+
+        double actual_v = (2 * Math.sqrt(2)) / (Math.abs(Math.cos(rd)) + Math.sin(rd)); // See my bs math
+
+        long time = (long)(cm / (MAX_VELOCITY * actual_v));
+
+        FL.setPower(frontLeftPower);
+        FR.setPower(frontRightPower);
+        BL.setPower(backLeftPower);
+        BR.setPower(backRightPower);
+
+       try{
+           Thread.sleep(time);
+       } catch (Exception e){
+           e.printStackTrace();
+       }
+
+        FL.setPower(0);
+        FR.setPower(0);
+        BL.setPower(0);
+        BR.setPower(0);
+        // fast_v / actual_v = constant to multiply time by
+        /*
+        Forward velocity is 2sqrt(2) * unit_v, basically the y-component of each mech. wheel
+        strafing at 45 deg to x-axis is 2*unit_v
+        strafing at 0 deg is 2sqrt(2) * unit_v
+        strafing at 30 deg to x-axis is 2.689 * unit_v
+
+        ostensibly, the wheels are at a 45 deg angle so that horizontal and vertical movement are the same
+
+         */
     }
     /*
     void turn(double deg, double power) {
