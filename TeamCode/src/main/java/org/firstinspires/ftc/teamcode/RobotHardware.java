@@ -143,25 +143,25 @@ public class RobotHardware {
 
 
     public void move(double x, double y, double turn, int unit){
-        FL.setTargetPosition((int)Range.clip(y+x+turn,-1,1));
-        FR.setTargetPosition((int)Range.clip(y-x-turn,-1,1));
-        BL.setTargetPosition((int)Range.clip(y-x+turn,-1,1));
-        BR.setTargetPosition((int)Range.clip(y+x-turn,-1,1));
+        FL.setTargetPosition((int)Range.clip(x+y+turn,-1,1));
+        FR.setTargetPosition((int)Range.clip(x-y-turn,-1,1));
+        BL.setTargetPosition((int)Range.clip(x-y+turn,-1,1));
+        BR.setTargetPosition((int)Range.clip(x+y-turn,-1,1));
 
         FL.setPower(1);
         FR.setPower(1);
         BL.setPower(1);
         BR.setPower(1);
 
-        while (FL.isBusy() && FR.isBusy() && BL.isBusy() && BR.isBusy()) {
+        while (FL.isBusy() && FR.isBusy() && BL.isBusy() && BR.isBusy()) { //lol just a copy && paste from george
             telemetry.addLine("motors busy");
             telemetry.update();
+            try {
+                Thread.sleep(1);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
-
-        FL.setPower(0);
-        FR.setPower(0);
-        BL.setPower(0);
-        BR.setPower(0);
     }
 
     // encoderDrive, but shitty^TM
