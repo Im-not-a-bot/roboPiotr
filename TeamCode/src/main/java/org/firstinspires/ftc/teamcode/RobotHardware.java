@@ -30,8 +30,8 @@ public class RobotHardware {
     final public static double ONE_DEGREE = FULL_ROBOTATION / 360;
 
     final public static int CM=0;
-    final public static int IN=400;
-    final public static int FT=4800;
+    final public static int IN=4;
+    final public static int FT=48;
     final public static int M=0;
 
     final static double MAX_VELOCITY = (ONE_CENTIMETER * 12) / (2 * Math.sqrt(2));
@@ -143,10 +143,10 @@ public class RobotHardware {
 
 
     public void move(double x, double y, double turn, int unit){
-        FL.setTargetPosition((int)Range.clip(x+y+turn,-1,1));
-        FR.setTargetPosition((int)Range.clip(x-y-turn,-1,1));
-        BL.setTargetPosition((int)Range.clip(x-y+turn,-1,1));
-        BR.setTargetPosition((int)Range.clip(x+y-turn,-1,1));
+        FL.setTargetPosition((int) (x+y+turn));
+        FR.setTargetPosition((int) x-y-turn);
+        BL.setTargetPosition((int) x-y+turn);
+        BR.setTargetPosition((int) x+y-turn);
 
         FL.setPower(1);
         FR.setPower(1);
