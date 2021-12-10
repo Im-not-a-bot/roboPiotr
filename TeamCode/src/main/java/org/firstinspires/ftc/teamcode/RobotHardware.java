@@ -144,9 +144,9 @@ public class RobotHardware {
 
     public void move(double x, double y, double turn, int unit){
         FL.setTargetPosition((int) (x+y+turn));
-        FR.setTargetPosition((int) x-y-turn);
-        BL.setTargetPosition((int) x-y+turn);
-        BR.setTargetPosition((int) x+y-turn);
+        FR.setTargetPosition((int) (x-y-turn));
+        BL.setTargetPosition((int) (x-y+turn));
+        BR.setTargetPosition((int) (x+y-turn));
 
         FL.setPower(1);
         FR.setPower(1);
