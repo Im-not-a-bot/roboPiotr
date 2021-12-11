@@ -30,8 +30,8 @@ public class distanceTesting extends LinearOpMode {
         // autonomous start
         telemetry.addData("Mode", "ENCODER DRIVE");
         telemetry.update();
-        robot.encoderDrive(0, 100, 0, 0.1); // 1 meter
-        robot.encoderDrive(10, 10, 360, 0.1); // turn
+        robot.encoderDrive(0, 100, 0, 0.1, robot.CM); // 1 meter
+        robot.encoderDrive(10, 10, 360, 0.1, robot.CM); // turn
         try{
            Thread.sleep(3000);
        } catch (Exception e){

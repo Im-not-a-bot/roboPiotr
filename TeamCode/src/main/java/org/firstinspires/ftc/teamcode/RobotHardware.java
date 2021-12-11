@@ -24,15 +24,14 @@ public class RobotHardware {
 
     // ^^ yes. there is a definite lack of shitty variable names such as "beans"
 
-    final public static double ONE_METER = 400; // guess and check lmao
-    final public static double ONE_CENTIMETER =  ONE_METER / 100;
-    final public static double FULL_ROBOTATION = 240; // found by deriving the inverse sin of LMAO I'm just kidding guess and check
+    final public static double ONE_METER = 6300; // guess and check lmao
+    final public static double ONE_CENTIMETER =  630;
+
+    final public static double CM =1;
+    final public static double M=100;
+    final public static double FULL_ROBOTATION = 240;
     final public static double ONE_DEGREE = FULL_ROBOTATION / 360;
 
-    final public static int CM=0;
-    final public static int IN=40;
-    final public static int FT=48;
-    final public static int M=0;
 
     final static double MAX_VELOCITY = (ONE_CENTIMETER * 12) / (2 * Math.sqrt(2));
 
@@ -100,11 +99,14 @@ public class RobotHardware {
         carousel.setDirection(DcMotorSimple.Direction.FORWARD);
     }
 
-    public void encoderDrive(double distanceX, double distanceY, double turn, double power) {
-        int frontLeftPosition = (int) (FL.getCurrentPosition() + ONE_CENTIMETER * distanceY - ONE_CENTIMETER * distanceX + ONE_DEGREE * (turn-90)); // if this doesn't work, change signs on distanceX and distanceY
-        int frontRightPosition = (int) (FR.getCurrentPosition() + ONE_CENTIMETER * distanceY + ONE_CENTIMETER * distanceX - ONE_DEGREE * (turn-90));
-        int backLeftPosition = (int) (BL.getCurrentPosition() + ONE_CENTIMETER * distanceY + ONE_CENTIMETER * distanceX + ONE_DEGREE * (turn-90));
-        int backRightPosition = (int) (BR.getCurrentPosition() + ONE_CENTIMETER * distanceY - ONE_CENTIMETER * distanceX - ONE_DEGREE * (turn-90));
+    public void encoderDrive(double distanceX, double distanceY, double turn, double power, double unit) {
+        double vertical = -distanceX;
+        double horizontal = -distanceY;
+
+        int frontLeftPosition = (int) (FL.getCurrentPosition() + ONE_CENTIMETER * vertical - ONE_CENTIMETER * horizontal + ONE_DEGREE * turn);
+        int frontRightPosition = (int) (FR.getCurrentPosition() + ONE_CENTIMETER * vertical + ONE_CENTIMETER * horizontal - ONE_DEGREE * turn);
+        int backLeftPosition = (int) (BL.getCurrentPosition() + ONE_CENTIMETER * vertical + ONE_CENTIMETER * horizontal + ONE_DEGREE * turn);
+        int backRightPosition = (int) (BR.getCurrentPosition() + ONE_CENTIMETER * vertical - ONE_CENTIMETER * horizontal - ONE_DEGREE * turn);
 
         FL.setTargetPosition(frontLeftPosition);
         FR.setTargetPosition(frontRightPosition);
@@ -127,7 +129,11 @@ public class RobotHardware {
             telemetry.addData("Current Encoders", "FL (%d), FR (%d), BL (%d), BR (%d)", FL.getCurrentPosition(), FR.getCurrentPosition(), BL.getCurrentPosition(), BR.getCurrentPosition());
             telemetry.update();
             ssshhhhhh */
-            //lol
+            try {
+                Thread.sleep(1);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
 
         FL.setPower(0);
@@ -139,29 +145,6 @@ public class RobotHardware {
         FR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         BL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         BR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-    }
-
-
-    public void move(double x, double y, double turn, int unit){
-        FL.setTargetPosition((int) (x+y+turn));
-        FR.setTargetPosition((int) (x-y-turn));
-        BL.setTargetPosition((int) (x-y+turn));
-        BR.setTargetPosition((int) (x+y-turn));
-
-        FL.setPower(1);
-        FR.setPower(1);
-        BL.setPower(1);
-        BR.setPower(1);
-
-        while (FL.isBusy() && FR.isBusy() && BL.isBusy() && BR.isBusy()) { //lol just a copy && paste from george
-            telemetry.addLine("motors busy");
-            telemetry.update();
-            try {
-                Thread.sleep(1);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
     }
 
     // encoderDrive, but shitty^TM
