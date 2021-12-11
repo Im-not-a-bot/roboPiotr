@@ -11,8 +11,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 
-@Autonomous(name = "autonomous blue", group = "Autonomous")
-public class autotest extends LinearOpMode {
+@Autonomous(name = "autonomous red", group = "Autonomous")
+public class autonomous2 extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
 
     RobotHardware r;
@@ -21,7 +21,8 @@ public class autotest extends LinearOpMode {
         waitForStart();
 
         r=new RobotHardware(hardwareMap);
-        r.encoderDrive(0,55,0,1,r.CM);
+        r.encoderDrive(0,-55,0,1,r.CM);
+        r.encoderDrive(60,0,0,1,r.CM);
 
         r.arm.setTargetPosition(360);
         r.arm.setPower(1);
@@ -32,16 +33,20 @@ public class autotest extends LinearOpMode {
         }
         r.armEnd.setPosition(75);
 
+        r.encoderDrive(0,0,180,1,r.CM);
 
+        r.encoderDrive(0,-55,0,1,r.CM);
+        r.encoderDrive(-110,0,0,1,r.CM);
 
-        r.encoderDrive(0,0,90,1,r.CM);
-        r.encoderDrive(-50,0,0,1,r.CM);
-        r.encoderDrive(0,102,0,1,r.CM);
         r.carousel.setPower(1);
         try {
             Thread.sleep(10000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        r.carousel.setPower(0);
+
+        r.encoderDrive(-15,55,0,1,r.CM);
+
     }
 }
