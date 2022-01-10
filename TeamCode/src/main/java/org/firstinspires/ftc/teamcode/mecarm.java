@@ -14,7 +14,8 @@ import com.qualcomm.robotcore.util.Range;
 
 import static com.qualcomm.robotcore.hardware.DcMotor.ZeroPowerBehavior.BRAKE;
 @TeleOp(name="mecarm", group="Linear Opmode")
-public class mecarm extends LinearOpMode {
+public class
+mecarm extends LinearOpMode {
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
