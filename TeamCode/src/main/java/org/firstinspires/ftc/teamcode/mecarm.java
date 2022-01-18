@@ -13,7 +13,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 import static com.qualcomm.robotcore.hardware.DcMotor.ZeroPowerBehavior.BRAKE;
-@TeleOp(name="mecarm", group="Linear Opmode")
+@TeleOp(name="mecarm (testing)", group="Linear Opmode")
 public class
 mecarm extends LinearOpMode {
 
@@ -60,6 +60,9 @@ mecarm extends LinearOpMode {
         waitForStart();
         runtime.reset();
 
+        double centi = 0;
+        double deggy = 0;
+
         // runs after driver presses play
         while (opModeIsActive()) {
                 motors();
@@ -72,6 +75,13 @@ mecarm extends LinearOpMode {
 
             if (gamepad1.dpad_right) robot.arm.setTargetPosition(robot.arm.getTargetPosition()+1);
             if (gamepad1.dpad_left) robot.arm.setTargetPosition(robot.arm.getTargetPosition()-1);
+
+            // this is to test autonomous functions
+            if (gamepad1.a) robot.encoderDrive(100, 0, 0, 30, centi, deggy);
+            if (gamepad1.right_trigger) centi += 10; else if (gamepad1.right_bumper) centi -= 10;
+            if (gamepad1.left_trigger) deggy += 10; else if (gamepad1.left_bumper) deggy -= 10;
+
+
 
             telemetry.addLine(//"UT (ms)"+  ((double)(System.nanoTime()-pt)/1000000)+"\n"+
                                  "motor position:" + "\n"+

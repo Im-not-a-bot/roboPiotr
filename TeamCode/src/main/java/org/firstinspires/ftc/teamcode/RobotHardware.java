@@ -99,14 +99,15 @@ public class RobotHardware {
         carousel.setDirection(DcMotorSimple.Direction.FORWARD);
     }
 
-    public void encoderDrive(double distanceX, double distanceY, double turn, double power, double unit) {
+    // moved away from constants for testing purposes
+    public void encoderDrive(double distanceX, double distanceY, double turn, double power, double one_centimeter, double one_degree) {
         double vertical = -distanceX;
         double horizontal = -distanceY;
 
-        int frontLeftPosition = (int) (FL.getCurrentPosition() + ONE_CENTIMETER * vertical - ONE_CENTIMETER * horizontal + ONE_DEGREE * turn);
-        int frontRightPosition = (int) (FR.getCurrentPosition() + ONE_CENTIMETER * vertical + ONE_CENTIMETER * horizontal - ONE_DEGREE * turn);
-        int backLeftPosition = (int) (BL.getCurrentPosition() + ONE_CENTIMETER * vertical + ONE_CENTIMETER * horizontal + ONE_DEGREE * turn);
-        int backRightPosition = (int) (BR.getCurrentPosition() + ONE_CENTIMETER * vertical - ONE_CENTIMETER * horizontal - ONE_DEGREE * turn);
+        int frontLeftPosition = (int) (FL.getCurrentPosition() + one_centimeter * vertical - one_centimeter * horizontal + one_degree * turn);
+        int frontRightPosition = (int) (FR.getCurrentPosition() + one_centimeter * vertical + one_centimeter * horizontal - one_degree * turn);
+        int backLeftPosition = (int) (BL.getCurrentPosition() + one_centimeter * vertical + one_centimeter * horizontal + one_degree * turn);
+        int backRightPosition = (int) (BR.getCurrentPosition() + one_centimeter * vertical - one_centimeter * horizontal - one_degree * turn);
 
         FL.setTargetPosition(frontLeftPosition);
         FR.setTargetPosition(frontRightPosition);
