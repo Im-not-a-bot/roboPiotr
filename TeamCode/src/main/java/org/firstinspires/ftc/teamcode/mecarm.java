@@ -89,7 +89,8 @@ mecarm extends LinearOpMode {
                                  "FL: "+robot.FL.getCurrentPosition()+"\n" +
                                  "BR: "+robot.BR.getCurrentPosition()+"\n" +
                                  "BL: "+robot.BL.getCurrentPosition()+"\n" +
-                                 "\n"
+                                 "Centimeter constant: " + centi +
+                                 "\nDegree constant: " + deggy + "\n"
 //                                 "arm position:" +"\n"+
 //                                 "Target point "+p+"\n"+
 //                                 "R "+R.getCurrentPosition()+"\n"+
