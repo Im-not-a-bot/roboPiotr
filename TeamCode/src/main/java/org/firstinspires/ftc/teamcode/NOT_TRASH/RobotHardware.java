@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.NOT_TRASH;
 
 import static com.qualcomm.robotcore.hardware.DcMotor.ZeroPowerBehavior.BRAKE;
 
@@ -12,8 +12,6 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
 public class RobotHardware {
-    // todo: fix these shitty constants. Will this still be a problem during mecanum wheels?
-    // i sure hope not! -Peat
 
     // pie in the sky: ML with camera
     // ^^ ok george, but i might get my lazy ass to work over break
@@ -24,16 +22,11 @@ public class RobotHardware {
 
     // ^^ yes. there is a definite lack of shitty variable names such as "beans"
 
-    final public static double ONE_METER = 6300; // guess and check lmao
-    final public static double ONE_CENTIMETER =  630;
+    //final public static double ONE_CENTIMETER =  630;
+    //final public static double ONE_DEGREE = 360;
 
-    final public static double CM =1;
-    final public static double M=100;
-    final public static double FULL_ROBOTATION = 240;
-    final public static double ONE_DEGREE = FULL_ROBOTATION / 360;
-
-
-    final static double MAX_VELOCITY = (ONE_CENTIMETER * 12) / (2 * Math.sqrt(2));
+    public double ONE_CENTIMETER = 100;
+    public double ONE_DEGREE = 100;
 
     public DcMotor FR;
     public DcMotor FL;
@@ -99,7 +92,7 @@ public class RobotHardware {
         carousel.setDirection(DcMotorSimple.Direction.FORWARD);
     }
 
-    public void encoderDrive(double distanceX, double distanceY, double turn, double power, double unit) {
+    public void encoderDrive(double distanceX, double distanceY, double turn, double power) {
         double vertical = -distanceX;
         double horizontal = -distanceY;
 
@@ -177,7 +170,7 @@ public class RobotHardware {
 
         double actual_v = (2 * Math.sqrt(2)) / (Math.abs(Math.cos(rd)) + Math.sin(rd)); // See my bs math
 
-        long time = (long)(cm / (MAX_VELOCITY * actual_v));
+        //long time = (long)(cm / (MAX_VELOCITY * actual_v));
 
         FL.setPower(frontLeftPower);
         FR.setPower(frontRightPower);
