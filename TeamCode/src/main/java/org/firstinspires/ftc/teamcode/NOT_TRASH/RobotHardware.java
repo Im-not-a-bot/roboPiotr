@@ -177,11 +177,12 @@ public class RobotHardware {
         BL.setPower(backLeftPower);
         BR.setPower(backRightPower);
 
-       try{
+       /*try{
            Thread.sleep(time);
        } catch (Exception e){
            e.printStackTrace();
        }
+       */
 
         FL.setPower(0);
         FR.setPower(0);
