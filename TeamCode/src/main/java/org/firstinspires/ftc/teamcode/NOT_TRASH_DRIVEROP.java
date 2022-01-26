@@ -2,12 +2,11 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
-import org.firstinspires.ftc.teamcode.NOT_TRASH.RobotHardware;
-
-@TeleOp(name="NOT TRASH", group="Autonomous")
+@TeleOp(name="NOT TRASH (Tokyo Drift edit)", group="Autonomous")
 public class NOT_TRASH_DRIVEROP extends LinearOpMode {
 
     // Declare OpMode members.
@@ -23,52 +22,57 @@ public class NOT_TRASH_DRIVEROP extends LinearOpMode {
 
         robot = new RobotHardware(hardwareMap);
 
-
         // runs the moment robot is initialized
         waitForStart();
         runtime.reset();
 
+        int arm_counter = 0;
+
         // runs after driver presses play
         while (opModeIsActive()) {
-            motors();
-            if(gamepad1.x){
-                robot.arm.setTargetPosition(robot.arm.getCurrentPosition());
-                robot.arm.setPower(.3);
+            double vertical = -gamepad1.left_stick_y;
+            double horizontal = gamepad1.left_stick_x;
+            double turn = gamepad1.right_stick_x;
+
+            if (gamepad1.left_bumper) robot.carousel.setPower(1);
+            else if (gamepad1.right_bumper) robot.carousel.setPower(-1);
+            else robot.carousel.setPower(0);
+
+            if (gamepad1.x) {
+                if (gamepad1.dpad_left) arm_counter += 5;
+                else if (gamepad1.dpad_right) arm_counter -= 5;
+
+
+                if (gamepad1.dpad_up) {
+                    robot.arm.setTargetPosition(arm_counter);
+                    robot.arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                }
+                else if (gamepad1.dpad_down) {
+                    robot.arm.setTargetPosition(arm_counter);
+                    robot.arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                }
             } else {
-                robot.arm.setPower(0);
+                //robot.arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+                if (gamepad1.dpad_up) robot.arm.setPower(0.25);
+                else if (gamepad1.dpad_down) robot.arm.setPower(-0.25);
+                else robot.arm.setPower(0);
+
+                robot.FL.setPower(Range.clip(vertical + horizontal + turn, -1, 1));
+                robot.FR.setPower(Range.clip(vertical - horizontal - turn, -1, 1));
+                robot.BL.setPower(Range.clip(vertical - horizontal + turn, -1, 1));
+                robot.BR.setPower(Range.clip(vertical + horizontal - turn, -1, 1));
+
+                if (gamepad1.dpad_left) robot.chain.setPower(0.33);
+                else if (gamepad1.dpad_right) robot.chain.setPower(-0.33);
+                else robot.chain.setPower(0);
             }
 
+            telemetry.addData("Motors", "FL (%.2f), FR (%.2f), BL (%.2f), BR (%.2f)", robot.FL.getPower(), robot.FR.getPower(), robot.BL.getPower(), robot.BR.getPower());
+            telemetry.addData("Encoders", "FL (%d), FR (%d), BL (%d), BR (%d)", robot.FL.getCurrentPosition(), robot.FR.getCurrentPosition(), robot.BL.getCurrentPosition(), robot.BR.getCurrentPosition());
+            telemetry.addData("More Motors", "Arm (%.2f), End (%.2f), Carousel (%.2f)", robot.arm.getPower(), robot.chain.getPower(), robot.carousel.getPower());
+            telemetry.addData("More Encoders", "Arm (%d), End (%d), Carousel (%d)", robot.arm.getCurrentPosition(), robot.chain.getCurrentPosition(), robot.carousel.getCurrentPosition());
 
-            if (gamepad1.a) robot.encoderDrive(100, 0, 0, 30);
-            if (gamepad1.right_trigger > 0) robot.ONE_CENTIMETER += 10; else if (gamepad1.right_bumper) robot.ONE_CENTIMETER -= 10;
-            if (gamepad1.left_trigger > 0) robot.ONE_DEGREE += 10; else if (gamepad1.left_bumper) robot.ONE_DEGREE -= 10;
-
-            telemetry.addLine(//"UT (ms)"+  ((double)(System.nanoTime()-pt)/1000000)+"\n"+
-                    "motor position:" + "\n"+
-                            "FR: "+robot.FR.getCurrentPosition()+"\n" +
-                            "FL: "+robot.FL.getCurrentPosition()+"\n" +
-                            "BR: "+robot.BR.getCurrentPosition()+"\n" +
-                            "BL: "+robot.BL.getCurrentPosition()+"\n" +
-                            "\nCentimeter: "+robot.ONE_CENTIMETER+
-                            "\nDegree: " + robot.ONE_DEGREE+
-                            "\nTrigger: " + gamepad1.right_trigger
-//                                 "arm position:" +"\n"+
-//                                 "Target point "+p+"\n"+
-//                                 "R "+R.getCurrentPosition()+"\n"+
-//                                 "L "+L.getCurrentPosition()+"\n"+
-//                                 "RS "+RS.getPosition()+"\n"+
-//                                 //"LS "+RS.getPosition()
-            );
-            //pt=System.nanoTime();
-            telemetry.update();
         }
-    }
-
-    void motors() {
-        //complex trial-and-error stuff
-        robot.FR.setPower(Range.clip(-gamepad1.left_stick_y-gamepad1.left_stick_x-.75*gamepad1.right_stick_x,-1,1));
-        robot.FL.setPower(Range.clip(-gamepad1.left_stick_y+gamepad1.left_stick_x+.75*gamepad1.right_stick_x,-1,1));
-        robot.BR.setPower(Range.clip(-gamepad1.left_stick_y+gamepad1.left_stick_x-.75*gamepad1.right_stick_x,-1,1));
-        robot.BL.setPower(Range.clip(-gamepad1.left_stick_y-gamepad1.left_stick_x+.75*gamepad1.right_stick_x,-1,1));
     }
 }

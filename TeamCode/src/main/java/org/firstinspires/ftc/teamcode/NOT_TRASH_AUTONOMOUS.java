@@ -4,10 +4,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.NOT_TRASH.RobotHardware;
 
-
-@Autonomous(name = "NOT TRASH", group = "Autonomous")
+@Autonomous(name = "NOT TRASH (Autonomous ver.)", group = "Autonomous")
 public class NOT_TRASH_AUTONOMOUS extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
 
