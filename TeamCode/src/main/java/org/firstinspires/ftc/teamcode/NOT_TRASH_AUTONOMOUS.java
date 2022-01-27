@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.NOT_TRASH.RobotHardware;
+import org.firstinspires.ftc.teamcode.RobotHardware;
 
 
 @Autonomous(name = "NOT TRASH - AUTO", group = "Autonomous")
@@ -13,6 +13,8 @@ public class NOT_TRASH_AUTONOMOUS extends LinearOpMode {
 
     RobotHardware robot;
 
+
+
     @Override
     public void runOpMode() {
         telemetry.addData("Status", "Initialized");
@@ -20,8 +22,15 @@ public class NOT_TRASH_AUTONOMOUS extends LinearOpMode {
 
         robot = new RobotHardware(hardwareMap);
 
+
+
         waitForStart();
         runtime.reset();
+
+
+
+        if (gamepad1.dpad_up) robot.ONE_CENTIMETER += 10;
+        else if (gamepad1.dpad_down) robot.ONE_CENTIMETER -= 10;
 
         // this can stay, but has to be changed for mecanum (i.e. new move method uses deg and magnitude)
         // autonomous start

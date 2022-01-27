@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.NOT_TRASH;
+package org.firstinspires.ftc.teamcode;
 
 import static com.qualcomm.robotcore.hardware.DcMotor.ZeroPowerBehavior.BRAKE;
 
@@ -33,8 +33,8 @@ public class RobotHardware {
     public DcMotor BR;
     public DcMotor BL;
 
-    public DcMotor Shoulder;
-    public DcMotor Wrist;
+    public DcMotor arm;
+    public DcMotor chain;
     public DcMotor carousel;
 
     public RobotHardware(HardwareMap hardwareMap) {
@@ -42,45 +42,45 @@ public class RobotHardware {
         FL = hardwareMap.get(DcMotor.class, "FL");
         BR = hardwareMap.get(DcMotor.class, "BR");
         BL = hardwareMap.get(DcMotor.class, "BL");
-        Shoulder = hardwareMap.get(DcMotor.class, "shoulder");
-        Wrist = hardwareMap.get(DcMotor.class,"wrist");
+        arm = hardwareMap.get(DcMotor.class, "arm");
+        chain = hardwareMap.get(DcMotor.class,"chain");
         carousel = hardwareMap.get(DcMotor.class,"carousel");
 
         FR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         FL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         BR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         BL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        Shoulder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        Wrist.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        chain.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         carousel.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         FR.setZeroPowerBehavior(BRAKE);
         FL.setZeroPowerBehavior(BRAKE);
         BR.setZeroPowerBehavior(BRAKE);
         BL.setZeroPowerBehavior(BRAKE);
-        Shoulder.setZeroPowerBehavior(BRAKE);
-        Wrist.setZeroPowerBehavior(BRAKE);
+        arm.setZeroPowerBehavior(BRAKE);
+        chain.setZeroPowerBehavior(BRAKE);
         carousel.setZeroPowerBehavior(BRAKE);
-
-        Shoulder.setTargetPosition(0);
-        Wrist.setTargetPosition(0);
 
         //makes accuracy remotely possible
         FR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         FL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         BR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         BL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        Shoulder.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        Wrist.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         carousel.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        arm.setTargetPosition(0);
+        arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        chain.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
 
         FR.setDirection(DcMotorSimple.Direction.FORWARD);
         FL.setDirection(DcMotorSimple.Direction.REVERSE);
         BR.setDirection(DcMotorSimple.Direction.FORWARD);
         BL.setDirection(DcMotorSimple.Direction.REVERSE);
-        Shoulder.setDirection(DcMotorSimple.Direction.FORWARD);
-        Wrist.setDirection(DcMotorSimple.Direction.FORWARD);
+        arm.setDirection(DcMotorSimple.Direction.FORWARD);
+        chain.setDirection(DcMotorSimple.Direction.FORWARD);
         carousel.setDirection(DcMotorSimple.Direction.FORWARD);
     }
 
@@ -109,16 +109,9 @@ public class RobotHardware {
         BR.setPower(power);
 
         while (FL.isBusy() && FR.isBusy() && BL.isBusy() && BR.isBusy()) {
-            /*
             telemetry.addData("Target Encoders", "FL (%d), FR (%d), BL (%d), BR (%d)", frontLeftPosition, frontRightPosition, backLeftPosition, backRightPosition);
             telemetry.addData("Current Encoders", "FL (%d), FR (%d), BL (%d), BR (%d)", FL.getCurrentPosition(), FR.getCurrentPosition(), BL.getCurrentPosition(), BR.getCurrentPosition());
             telemetry.update();
-            ssshhhhhh */
-            try {
-                Thread.sleep(1);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
         }
 
         FL.setPower(0);
