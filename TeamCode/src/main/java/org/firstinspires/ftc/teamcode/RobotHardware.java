@@ -25,7 +25,7 @@ public class RobotHardware {
     //final public static double ONE_CENTIMETER =  630;
     //final public static double ONE_DEGREE = 360;
 
-    public double ONE_CENTIMETER = 100;
+    public double ONE_METER = 4761;
     public double ONE_DEGREE = 100;
 
     public DcMotor FR;
@@ -84,14 +84,12 @@ public class RobotHardware {
         carousel.setDirection(DcMotorSimple.Direction.FORWARD);
     }
 
-    public void encoderDrive(double distanceX, double distanceY, double turn, double power) {
-        double vertical = -distanceX;
-        double horizontal = -distanceY;
+    public void encoderDrive(double vertical, double horizontal, double turn, double power) {
 
-        int frontLeftPosition = (int) (FL.getCurrentPosition() + ONE_CENTIMETER * vertical - ONE_CENTIMETER * horizontal + ONE_DEGREE * turn);
-        int frontRightPosition = (int) (FR.getCurrentPosition() + ONE_CENTIMETER * vertical + ONE_CENTIMETER * horizontal - ONE_DEGREE * turn);
-        int backLeftPosition = (int) (BL.getCurrentPosition() + ONE_CENTIMETER * vertical + ONE_CENTIMETER * horizontal + ONE_DEGREE * turn);
-        int backRightPosition = (int) (BR.getCurrentPosition() + ONE_CENTIMETER * vertical - ONE_CENTIMETER * horizontal - ONE_DEGREE * turn);
+        int frontLeftPosition = (int) (FL.getCurrentPosition() + ONE_METER * vertical + ONE_METER * horizontal + ONE_DEGREE * turn);
+        int frontRightPosition = (int) (FR.getCurrentPosition() + ONE_METER * vertical - ONE_METER * horizontal - ONE_DEGREE * turn);
+        int backLeftPosition = (int) (BL.getCurrentPosition() + ONE_METER * vertical - ONE_METER * horizontal + ONE_DEGREE * turn);
+        int backRightPosition = (int) (BR.getCurrentPosition() + ONE_METER * vertical + ONE_METER * horizontal - ONE_DEGREE * turn);
 
         FL.setTargetPosition(frontLeftPosition);
         FR.setTargetPosition(frontRightPosition);
@@ -109,9 +107,6 @@ public class RobotHardware {
         BR.setPower(power);
 
         while (FL.isBusy() && FR.isBusy() && BL.isBusy() && BR.isBusy()) {
-            telemetry.addData("Target Encoders", "FL (%d), FR (%d), BL (%d), BR (%d)", frontLeftPosition, frontRightPosition, backLeftPosition, backRightPosition);
-            telemetry.addData("Current Encoders", "FL (%d), FR (%d), BL (%d), BR (%d)", FL.getCurrentPosition(), FR.getCurrentPosition(), BL.getCurrentPosition(), BR.getCurrentPosition());
-            telemetry.update();
         }
 
         FL.setPower(0);
@@ -123,6 +118,12 @@ public class RobotHardware {
         FR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         BL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         BR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
+
+    public void moveArm(int encoderPosition){
+        arm.setTargetPosition(encoderPosition);
+        arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        arm.setPower(1);
     }
 
     // encoderDrive, but shitty^TM
