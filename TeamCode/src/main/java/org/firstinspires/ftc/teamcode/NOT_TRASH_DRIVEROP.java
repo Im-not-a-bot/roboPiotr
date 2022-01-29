@@ -40,21 +40,21 @@ public class NOT_TRASH_DRIVEROP extends LinearOpMode {
             else if (gamepad1.right_bumper) robot.carousel.setPower(-1);
             else robot.carousel.setPower(0);
 
-            if (gamepad1.left_trigger > 0.5) robot.chain.setPower(0.05);
-            else if (gamepad1.right_trigger > 0.5) robot.chain.setPower(-0.05);
+            if (gamepad1.left_trigger > 0.5) robot.chain.setPower(0.1);
+            else if (gamepad1.right_trigger > 0.5) robot.chain.setPower(-0.1);
             else robot.chain.setPower(0);
 
 
             armControl: {
-                if (gamepad1.dpad_up && arm_counter < 200) {
+                if (gamepad1.dpad_up) {
                     arm_counter += 2;
-                } else if (gamepad1.dpad_down && arm_counter > 0) {
+                } else if (gamepad1.dpad_down) {
                     arm_counter -= 2;
                 } else
                     break armControl;
 
                 robot.arm.setTargetPosition(arm_counter);
-                ((DcMotorEx)(robot.arm)).setVelocity(200);
+                ((DcMotorEx)(robot.arm)).setVelocity(2000);
             }
 
 
