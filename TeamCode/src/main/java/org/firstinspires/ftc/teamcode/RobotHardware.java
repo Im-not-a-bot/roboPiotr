@@ -26,7 +26,7 @@ public class RobotHardware {
     //final public static double ONE_DEGREE = 360;
 
     public double ONE_METER = 4761;
-    public double ONE_DEGREE = 100;
+    public double ONE_DEGREE = 20;
 
     public DcMotor FR;
     public DcMotor FL;

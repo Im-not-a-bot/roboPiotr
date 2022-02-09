@@ -29,6 +29,8 @@ public class NOT_TRASH_DRIVEROP extends LinearOpMode {
         runtime.reset();
 
         int arm_counter = 100; // max: 200, min: 0
+        int heightLimit = 220;
+        boolean aPressed = false;
 
         // runs after driver presses play
         while (opModeIsActive()) {
@@ -44,11 +46,18 @@ public class NOT_TRASH_DRIVEROP extends LinearOpMode {
             else if (gamepad1.right_trigger > 0.5) robot.chain.setPower(-0.05);
             else robot.chain.setPower(0);
 
+            if (gamepad1.a){
+                aPressed = true;
+            }else if (aPressed){
+                aPressed = false;
+                heightLimit = arm_counter+1;
+            }
+
 
             armControl: {
-                if (gamepad1.dpad_up && arm_counter < 200) {
+                if (gamepad1.dpad_up && (arm_counter < heightLimit|| gamepad1.a)) {
                     arm_counter += 2;
-                } else if (gamepad1.dpad_down && arm_counter > 0) {
+                } else if (gamepad1.dpad_down && arm_counter > -10) {
                     arm_counter -= 2;
                 } else
                     break armControl;

@@ -29,31 +29,44 @@ public class CrookedBot {
     public DcMotor BR;
     public DcMotor BL;
 
-    public DcMotor arm;
+    public DcMotor carL;
     public DcMotor chain;
-    public DcMotor carousel;
+    public DcMotor carR;
 
     public CrookedBot(HardwareMap hardwareMap) {
         FR  = hardwareMap.get(DcMotor.class, "FR");
         FL = hardwareMap.get(DcMotor.class, "FL");
         BR = hardwareMap.get(DcMotor.class, "BR");
         BL = hardwareMap.get(DcMotor.class, "BL");
+        chain = hardwareMap.get(DcMotor.class,"chain");
+        carL = hardwareMap.get(DcMotor.class,"carL");
+        carR = hardwareMap.get(DcMotor.class,"carR");
+
 
         FR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         FL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         BR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         BL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        chain.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        carL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        carR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         FR.setZeroPowerBehavior(BRAKE);
         FL.setZeroPowerBehavior(BRAKE);
         BR.setZeroPowerBehavior(BRAKE);
         BL.setZeroPowerBehavior(BRAKE);
+        chain.setZeroPowerBehavior(BRAKE);
+        carL.setZeroPowerBehavior(BRAKE);
+        carR.setZeroPowerBehavior(BRAKE);
 
         //makes accuracy remotely possible
         FR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         FL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         BR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         BL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        chain.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        carL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        carR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
 
 
@@ -61,6 +74,9 @@ public class CrookedBot {
         FL.setDirection(DcMotorSimple.Direction.REVERSE);
         BR.setDirection(DcMotorSimple.Direction.REVERSE);
         BL.setDirection(DcMotorSimple.Direction.FORWARD);
+        chain.setDirection(DcMotorSimple.Direction.FORWARD);
+        carL.setDirection(DcMotorSimple.Direction.FORWARD);
+        carR.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
     public void encoderDrive(double vertical, double horizontal, double turn, double power) {

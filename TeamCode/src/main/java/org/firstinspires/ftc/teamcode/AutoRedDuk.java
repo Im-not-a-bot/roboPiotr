@@ -26,19 +26,28 @@ public class AutoRedDuk extends LinearOpMode {
 
         waitForStart();
         runtime.reset();
-
+/*
+        robot.arm.setTargetPosition(150);
+        robot.arm.setPower(1);
+        robot.encoderDrive(0,1.2,0,1);
+*/
 
 
         robot.encoderDrive(.2,0,0,1);
         sleep(50);
         robot.encoderDrive(0,0,90,1);
-        robot.encoderDrive(.75,0,0,1);
-        sleep(50);
 
-        robot.carousel.setPower(.5);
-        sleep(3000);
-        robot.carousel.setPower(0);
-        sleep(500);
+        robot.encoderDrive(-.60,0,0,1);
+        robot.encoderDrive(-.10,0,0,.3);
+
+        sleep(50);
+            robot.carousel.setPower(.5);
+            sleep(5000);
+            robot.carousel.setPower(0);
+
+
+        robot.encoderDrive(0,-.5,0,1);
+        robot.encoderDrive(-.5,0,0,1);
 
 
 //        robot.arm.setTargetPosition(188);

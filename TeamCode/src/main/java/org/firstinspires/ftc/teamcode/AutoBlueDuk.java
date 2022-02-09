@@ -27,8 +27,21 @@ public class AutoBlueDuk extends LinearOpMode {
         waitForStart();
         runtime.reset();
 
+        robot.encoderDrive(.2,0,0,1);
+        sleep(50);
+        robot.encoderDrive(0,.60,0,1);
+        robot.encoderDrive(0,.15,0,.3);
+
+        sleep(50);
+
+            robot.carousel.setPower(-.5);
+            sleep(5000);
+            robot.carousel.setPower(0);
 
 
+        robot.encoderDrive(0,.5,0,1);
+        robot.encoderDrive(.5,0,0,1);
+/*
         robot.encoderDrive(.2,0,0,1);
         sleep(50);
         robot.encoderDrive(0,.75,0,1);
@@ -38,5 +51,7 @@ public class AutoBlueDuk extends LinearOpMode {
 //        robot.arm.setTargetPosition(188);
 //        robot.arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 //        robot.arm.setPower(1);
+*/
+
     }
 }

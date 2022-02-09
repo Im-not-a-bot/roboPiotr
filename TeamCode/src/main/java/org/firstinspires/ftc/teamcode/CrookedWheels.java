@@ -39,6 +39,25 @@ public class CrookedWheels extends LinearOpMode {
             robot.BL.setPower(Range.clip(vertical - horizontal + turn, -1, 1));
             robot.BR.setPower(Range.clip(vertical + horizontal - turn, -1, 1));
 
+            if (gamepad1.dpad_up){
+                robot.chain.setPower(1);
+            }else if (gamepad1.dpad_down){
+                robot.chain.setPower(-1);
+            }else{
+                robot.chain.setPower(0);
+            }
+
+            if (gamepad1.dpad_right){
+                robot.carL.setPower(1);
+                robot.carR.setPower(1);
+            }else if (gamepad1.dpad_left){
+                robot.carL.setPower(-1);
+                robot.carR.setPower(-1);
+            }else{
+                robot.carL.setPower(0);
+                robot.carR.setPower(0);
+            }
+
             telemetry.addData("Motors", "FL (%.2f), FR (%.2f), BL (%.2f), BR (%.2f)", robot.FL.getPower(), robot.FR.getPower(), robot.BL.getPower(), robot.BR.getPower());
             telemetry.addData("Encoders", "FL (%d), FR (%d), BL (%d), BR (%d)", robot.FL.getCurrentPosition(), robot.FR.getCurrentPosition(), robot.BL.getCurrentPosition(), robot.BR.getCurrentPosition());
 
