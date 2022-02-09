@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.teamcode.RobotHardware;
 
-@TeleOp(name="NOT TRASH (Tokyo edit)", group="Autonomous")
+@TeleOp(name="NOT TRASH (Tokyo edit)", group="Driver Op")
 public class NOT_TRASH_DRIVEROP extends LinearOpMode {
 
     // Declare OpMode members.

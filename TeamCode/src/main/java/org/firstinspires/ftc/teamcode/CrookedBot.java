@@ -9,15 +9,6 @@ import com.qualcomm.robotcore.util.Range;
 
 public class CrookedBot {
 
-    // pie in the sky: ML with camera
-    // ^^ ok george, but i might get my lazy ass to work over break
-
-    // coding for mecanum and linear extruder / claw
-    // consistent abstractions (turning, moving)
-    // anything else?
-
-    // ^^ yes. there is a definite lack of shitty variable names such as "beans"
-
     //final public static double ONE_CENTIMETER =  630;
     //final public static double ONE_DEGREE = 360;
 
