@@ -37,18 +37,28 @@ public class Crooked_Driver_OP extends LinearOpMode {
 
 
             // carL
-            if (gamepad1.left_trigger > 0.5) robot.carL.setPower(1);
-            else if (gamepad1.left_bumper) robot.carL.setPower(-1);
-            else robot.carL.setPower(0);
-
+            if (gamepad1.left_trigger > 0.5) {
+                robot.carL.setPower(1);
+                robot.carR.setPower(1);
+            }
+            else if (gamepad1.left_bumper) {
+                robot.carL.setPower(-1);
+                robot.carR.setPower(-1);
+            }
+            else {
+                robot.carL.setPower(0);
+                robot.carR.setPower(0);
+            }
+            /*
             // carR
             if (gamepad1.right_trigger > 0.5) robot.carR.setPower(1);
             else if (gamepad1.right_bumper) robot.carR.setPower(-1);
             else robot.carR.setPower(0);
+             */
 
             // chain
-            if (gamepad1.dpad_up) robot.chain.setPower(0.05);
-            else if (gamepad1.dpad_down) robot.chain.setPower(-0.05);
+            if (gamepad1.dpad_up) robot.chain.setPower(0.25);
+            else if (gamepad1.dpad_down) robot.chain.setPower(-0.25);
             else robot.chain.setPower(0);
 
 

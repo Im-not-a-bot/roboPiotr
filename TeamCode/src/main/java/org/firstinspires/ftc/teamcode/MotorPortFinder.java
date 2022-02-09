@@ -13,14 +13,14 @@ public class MotorPortFinder extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
 
 
-    RobotHardware robot;
+    CrookedBot robot;
 
     @Override
     public void runOpMode() {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
-        robot = new RobotHardware(hardwareMap);
+        robot = new CrookedBot(hardwareMap);
 
         // runs the moment robot is initialized
         waitForStart();

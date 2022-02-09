@@ -21,8 +21,9 @@ public class CrookedBot {
     public DcMotor BL;
 
     public DcMotor carL;
-    public DcMotor chain;
     public DcMotor carR;
+
+    public DcMotor chain;
 
     public CrookedBot(HardwareMap hardwareMap) {
         FR  = hardwareMap.get(DcMotor.class, "FR");
@@ -63,8 +64,8 @@ public class CrookedBot {
 
         FR.setDirection(DcMotorSimple.Direction.FORWARD);
         FL.setDirection(DcMotorSimple.Direction.REVERSE);
-        BR.setDirection(DcMotorSimple.Direction.REVERSE);
-        BL.setDirection(DcMotorSimple.Direction.FORWARD);
+        BR.setDirection(DcMotorSimple.Direction.FORWARD);
+        BL.setDirection(DcMotorSimple.Direction.REVERSE);
         chain.setDirection(DcMotorSimple.Direction.FORWARD);
         carL.setDirection(DcMotorSimple.Direction.FORWARD);
         carR.setDirection(DcMotorSimple.Direction.REVERSE);
