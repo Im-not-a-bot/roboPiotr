@@ -12,7 +12,7 @@ public class CrookedBot {
     //final public static double ONE_CENTIMETER =  630;
     //final public static double ONE_DEGREE = 360;
 
-    public double ONE_METER = 4761;
+    public double ONE_CENTIMETER = 47.61;
     public double ONE_DEGREE = 100;
 
     public DcMotor FR;
@@ -72,11 +72,10 @@ public class CrookedBot {
     }
 
     public void encoderDrive(double vertical, double horizontal, double turn, double power) {
-
-        int frontLeftPosition = (int) (FL.getCurrentPosition() + ONE_METER * vertical + ONE_METER * horizontal + ONE_DEGREE * turn);
-        int frontRightPosition = (int) (FR.getCurrentPosition() + ONE_METER * vertical - ONE_METER * horizontal - ONE_DEGREE * turn);
-        int backLeftPosition = (int) (BL.getCurrentPosition() + ONE_METER * vertical - ONE_METER * horizontal + ONE_DEGREE * turn);
-        int backRightPosition = (int) (BR.getCurrentPosition() + ONE_METER * vertical + ONE_METER * horizontal - ONE_DEGREE * turn);
+        int frontLeftPosition = (int) (FL.getCurrentPosition() + ONE_CENTIMETER * vertical + ONE_CENTIMETER * horizontal + ONE_DEGREE * turn);
+        int frontRightPosition = (int) (FR.getCurrentPosition() + ONE_CENTIMETER * vertical - ONE_CENTIMETER * horizontal - ONE_DEGREE * turn);
+        int backLeftPosition = (int) (BL.getCurrentPosition() + ONE_CENTIMETER * vertical - ONE_CENTIMETER * horizontal + ONE_DEGREE * turn);
+        int backRightPosition = (int) (BR.getCurrentPosition() + ONE_CENTIMETER * vertical + ONE_CENTIMETER * horizontal - ONE_DEGREE * turn);
 
         FL.setTargetPosition(frontLeftPosition);
         FR.setTargetPosition(frontRightPosition);
