@@ -67,8 +67,8 @@ public class CrookedBot {
         BR.setDirection(DcMotorSimple.Direction.FORWARD);
         BL.setDirection(DcMotorSimple.Direction.REVERSE);
         chain.setDirection(DcMotorSimple.Direction.FORWARD);
-        carL.setDirection(DcMotorSimple.Direction.FORWARD);
-        carR.setDirection(DcMotorSimple.Direction.REVERSE);
+        carL.setDirection(DcMotorSimple.Direction.REVERSE);
+        carR.setDirection(DcMotorSimple.Direction.FORWARD);
     }
 
     public void encoderDrive(double vertical, double horizontal, double turn, double power) {
