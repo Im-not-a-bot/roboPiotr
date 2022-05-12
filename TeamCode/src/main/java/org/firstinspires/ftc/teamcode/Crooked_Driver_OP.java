@@ -2,11 +2,8 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
-import org.firstinspires.ftc.teamcode.RobotHardware;
 
 @TeleOp(name="Crooked OP", group="Driver Op")
 public class Crooked_Driver_OP extends LinearOpMode {
@@ -34,21 +31,32 @@ public class Crooked_Driver_OP extends LinearOpMode {
             double horizontal = gamepad1.left_stick_x;
             double turn = gamepad1.right_stick_x;
 
+            if (gamepad1.x) {
+                // carR
+                if (gamepad1.right_trigger > 0.5) robot.carR.setPower(1);
+                else if (gamepad1.right_bumper) robot.carR.setPower(-1);
+                else robot.carR.setPower(0);
 
+                // carL
+                if (gamepad1.left_trigger > 0.5) robot.carL.setPower(1);
+                else if (gamepad1.left_bumper) robot.carL.setPower(-1);
+                else robot.carL.setPower(0);
+            } else {
+                // carL
+                if (gamepad1.left_trigger > 0.5) {
+                    robot.carL.setPower(1);
+                    robot.carR.setPower(1);
+                }
+                else if (gamepad1.right_trigger > 0.5) {
+                    robot.carL.setPower(-1);
+                    robot.carR.setPower(-1);
+                }
+                else {
+                    robot.carL.setPower(0);
+                    robot.carR.setPower(0);
+                }
+            }
 
-            // carL
-            if (gamepad1.left_trigger > 0.5) {
-                robot.carL.setPower(1);
-                robot.carR.setPower(1);
-            }
-            else if (gamepad1.left_bumper) {
-                robot.carL.setPower(-1);
-                robot.carR.setPower(-1);
-            }
-            else {
-                robot.carL.setPower(0);
-                robot.carR.setPower(0);
-            }
             /*
             // carR
             if (gamepad1.right_trigger > 0.5) robot.carR.setPower(1);
@@ -57,8 +65,8 @@ public class Crooked_Driver_OP extends LinearOpMode {
              */
 
             // chain
-            if (gamepad1.dpad_up) robot.chain.setPower(0.25);
-            else if (gamepad1.dpad_down) robot.chain.setPower(-0.25);
+            if (gamepad1.dpad_up) robot.chain.setPower(0.4);
+            else if (gamepad1.dpad_down) robot.chain.setPower(-0.4);
             else robot.chain.setPower(0);
 
 
