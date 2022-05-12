@@ -5,9 +5,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.RobotHardware;
-
-
 @Autonomous(name = "autoboiR", group = "Autonomous")
 public class autoboiR extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
