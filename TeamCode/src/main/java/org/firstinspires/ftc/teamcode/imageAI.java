@@ -41,6 +41,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.android.util.Size;
 import org.firstinspires.ftc.robotcore.external.function.Consumer;
 import org.firstinspires.ftc.robotcore.external.function.Continuation;
@@ -131,6 +132,8 @@ public class imageAI extends LinearOpMode {
 
             boolean buttonPressSeen = false;
             boolean captureWhenAvailable = false;
+
+
             while (opModeIsActive()) {
 
                 boolean buttonIsPressed = gamepad1.a;
@@ -292,7 +295,6 @@ public class imageAI extends LinearOpMode {
     }
 
     private void saveBitmap(Bitmap bitmap) {
-
 
 
         /*File file = new File(captureDirectory, String.format(Locale.getDefault(), "webcam-frame-%d.jpg", captureCounter++));
