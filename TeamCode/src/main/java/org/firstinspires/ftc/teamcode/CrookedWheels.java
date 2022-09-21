@@ -22,10 +22,10 @@ public class CrookedWheels extends LinearOpMode {
     @Override
     public void runOpMode() {
 
-        fl = hardwareMap.get(DcMotor.class, "fl");
-        fr = hardwareMap.get(DcMotor.class, "fr");
-        bl = hardwareMap.get(DcMotor.class, "bl");
-        br = hardwareMap.get(DcMotor.class, "br");
+        fl = hardwareMap.get(DcMotor.class, "FL");
+        fr = hardwareMap.get(DcMotor.class, "FR");
+        bl = hardwareMap.get(DcMotor.class, "BL");
+        br = hardwareMap.get(DcMotor.class, "BR");
 
         // runs the moment robot is initialized
         waitForStart();
@@ -34,8 +34,8 @@ public class CrookedWheels extends LinearOpMode {
 
         // runs after driver presses play
         while (opModeIsActive()) {
-            double vertical = -gamepad1.left_stick_y;
-            double horizontal = gamepad1.left_stick_x;
+            double horizontal = -gamepad1.left_stick_y;
+            double vertical = gamepad1.left_stick_x;
             double turn = gamepad1.right_stick_x;
 
 
