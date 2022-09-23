@@ -92,18 +92,6 @@ public class CrookedBot {
         BL.setPower(power);
         BR.setPower(power);
 
-        while (FL.isBusy() && FR.isBusy() && BL.isBusy() && BR.isBusy()) {
-        }
-
-        FL.setPower(0);
-        FR.setPower(0);
-        BL.setPower(0);
-        BR.setPower(0);
-
-        FL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        FR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        BL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        BR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     // encoderDrive, but shitty^TM

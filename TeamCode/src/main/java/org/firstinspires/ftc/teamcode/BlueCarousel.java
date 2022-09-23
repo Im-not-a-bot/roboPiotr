@@ -2,30 +2,46 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 
 @Autonomous(name = "Blue Carousel", group = "Autonomous")
 public class BlueCarousel extends LinearOpMode {
-    private ElapsedTime runtime = new ElapsedTime();
+    private final ElapsedTime runtime = new ElapsedTime();
 
-    CrookedBot robot;
+    DcMotor fl = hardwareMap.get(DcMotor.class, "FL");
+    DcMotor fr = hardwareMap.get(DcMotor.class, "FR");
+    DcMotor bl = hardwareMap.get(DcMotor.class, "BL");
+    DcMotor br = hardwareMap.get(DcMotor.class, "BR");
+
+
 
     @Override
     public void runOpMode() {
-        robot = new CrookedBot(hardwareMap);
+        // runs the moment robot is initialized
 
         waitForStart();
-        runtime.reset();
 
-        // ONE_DEGREE is too small?
-        // add more turn? check orientation of 'unit circle'
-        // horizontal doesn't seem to work
-        robot.encoderDrive(80,-10, 0,0.3);
-        robot.carR.setPower(-1);
-        robot.encoderDrive(20, 0, 0, 0.02);
-        robot.carR.setPower(0);
+        fl.setPower(1);
+        sleep(2000);
+        fl.setPower(0);
 
-        robot.encoderDrive(0, -60, 0, 0.3);
+        fr.setPower(1);
+        sleep(2000);
+        fr.setPower(0);
+
+        bl.setPower(1);
+        sleep(2000);
+        bl.setPower(0);
+
+        br.setPower(1);
+        sleep(2000);
+        br.setPower(0);
+
+        //yay ig
+
+        //while (opModeIsActive()) {
+        //}
     }
 }

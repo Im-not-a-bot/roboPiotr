@@ -30,6 +30,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.ImageFormat;
 import android.os.Handler;
 
@@ -65,6 +66,7 @@ import org.firstinspires.ftc.robotcore.internal.system.Deadline;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Locale;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.TimeUnit;
@@ -92,20 +94,21 @@ public class imageAI extends LinearOpMode {
     private EvictingBlockingQueue<Bitmap> frameQueue;
 
     /** State regarding where and how to save frames when the 'A' button is pressed. */
-    private int captureCounter = 0;
-    private File captureDirectory = AppUtil.ROBOT_DATA_DIR;
+    private final int captureCounter = 0;
+    private final File captureDirectory = AppUtil.ROBOT_DATA_DIR;
 
     /** A utility object that indicates where the asynchronous callbacks from the camera
      * infrastructure are to run. In this OpMode, that's all hidden from you (but see {@link #startCamera}
      * if you're curious): no knowledge of multi-threading is needed here. */
     private Handler callbackHandler;
 
+    public Server s;
+
     //----------------------------------------------------------------------------------------------
     // Main OpMode entry
     //----------------------------------------------------------------------------------------------
 
     @Override public void runOpMode() {
-
 
 
 
@@ -132,11 +135,16 @@ public class imageAI extends LinearOpMode {
 
             boolean buttonPressSeen = false;
             boolean captureWhenAvailable = false;
-
+            try {
+                s = new Server(42069, telemetry);
+                s.start();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
             while (opModeIsActive()) {
 
-                boolean buttonIsPressed = gamepad1.a;
+                boolean buttonIsPressed = gamepad1.dpad_up;
                 if (buttonIsPressed && !buttonPressSeen) {
                     captureWhenAvailable = true;
                 }
@@ -144,6 +152,7 @@ public class imageAI extends LinearOpMode {
 
                 if (captureWhenAvailable) {
                     Bitmap bmp = frameQueue.poll();
+
                     if (bmp != null) {
                         captureWhenAvailable = false;
                         onNewFrame(bmp);
@@ -297,6 +306,23 @@ public class imageAI extends LinearOpMode {
     private void saveBitmap(Bitmap bitmap) {
 
 
+        int[] pixels = new int[bitmap.getHeight()*bitmap.getWidth()];
+        bitmap.getPixels(pixels, 0, bitmap.getWidth(), 0, 0, bitmap.getWidth(), bitmap.getHeight());
+
+        telemetry.addLine(String.valueOf(pixels.length));
+        Bitmap t1=createContrast(bitmap,1);
+
+        byte[] data;
+
+        boolean[] imgdat = new boolean[bitmap.getWidth()* bitmap.getHeight()];
+
+        for(int y=0;y<t1.getHeight();y++){for(int x=0;x<t1.getWidth();x++){
+            if(bitmap.getPixel(x,y)==Color.WHITE){imgdat[y* bitmap.getWidth()+x]=true;
+            }
+        }}
+
+        telemetry.update();
+
         /*File file = new File(captureDirectory, String.format(Locale.getDefault(), "webcam-frame-%d.jpg", captureCounter++));
         try {
             try (FileOutputStream outputStream = new FileOutputStream(file)) {
@@ -310,4 +336,46 @@ public class imageAI extends LinearOpMode {
         */
 
     }
+
+
+    public static Bitmap createContrast(Bitmap src, double value) {
+// image size
+        int width = src.getWidth();
+        int height = src.getHeight();
+// create output bitmap
+        Bitmap bmOut = Bitmap.createBitmap(width, height, src.getConfig());
+// color information
+        int A, R, G, B;
+        int pixel;
+// get contrast value
+        double contrast = Math.pow((100 + value) / 100, 2);
+
+// scan through all pixels
+        for(int x = 0; x < width; ++x) {
+            for(int y = 0; y < height; ++y) {
+                // get pixel color
+                pixel = src.getPixel(x, y);
+                A = Color.alpha(pixel);
+                // apply filter contrast for every channel R, G, B
+                R = Color.red(pixel);
+                R = (int)(((((R / 255.0) - 0.5) * contrast) + 0.5) * 255.0);
+                if(R < 0) { R = 0; }
+                else if(R > 255) { R = 255; }
+
+                G = Color.red(pixel);
+                G = (int)(((((G / 255.0) - 0.5) * contrast) + 0.5) * 255.0);
+                if(G < 0) { G = 0; }
+                else if(G > 255) { G = 255; }
+
+                B = Color.red(pixel);
+                B = (int)(((((B / 255.0) - 0.5) * contrast) + 0.5) * 255.0);
+                if(B < 0) { B = 0; }
+                else if(B > 255) { B = 255; }
+
+                // set new pixel color to output bitmap
+                bmOut.setPixel(x, y, Color.argb(A, R, G, B));
+            }
+        }
+
+        return bmOut;}
 }
