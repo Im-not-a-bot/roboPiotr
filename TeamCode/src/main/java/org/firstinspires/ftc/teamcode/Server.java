@@ -15,6 +15,7 @@ public class Server extends Thread {
     int port;
     public byte[] data = new byte[0];
 
+    public boolean exit = true;
 
     public Server(int p, Telemetry t) throws IOException {
         port=p;
@@ -35,9 +36,9 @@ public class Server extends Thread {
 
                 telemetry.addLine(in.readUTF());
                 DataOutputStream out = new DataOutputStream(server.getOutputStream());
-                out.writeUTF("you are now connected to " + server.getLocalSocketAddress());
+//                out.writeUTF("you are now connected to " + server.getLocalSocketAddress());
 
-                boolean exit = true;
+                telemetry.update();
 
                 Thread t1 = new Thread(new Runnable() {
                     @Override

@@ -33,10 +33,10 @@ public class CrookedWheels extends LinearOpMode {
         bl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         br.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        fl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        fr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        bl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        br.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        fl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        fr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        bl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        br.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         fl.setDirection(DcMotorSimple.Direction.REVERSE);
         fr.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -70,15 +70,15 @@ public class CrookedWheels extends LinearOpMode {
     }
 
     void move(){
-        double horizontal = -gamepad1.left_stick_x;
-        double vertical = -gamepad1.left_stick_y;
+        double horizontal = -gamepad1.left_stick_x*.5;   // this works so dont question it
+        double vertical = gamepad1.left_stick_y*.5;
         double turn = -gamepad1.right_stick_x*2/3;
 
         double powermultiplier = .5;
 
-        fl.setPower(Range.clip((vertical + horizontal + turn)*powermultiplier, -1, 1));
-        fr.setPower(Range.clip((vertical - horizontal - turn)*powermultiplier, -1, 1));
-        bl.setPower(Range.clip((vertical - horizontal + turn)*powermultiplier, -1, 1));
-        br.setPower(Range.clip((vertical + horizontal - turn)*powermultiplier, -1, 1));
+        fl.setPower(Range.clip((horizontal + vertical + turn)*powermultiplier, -1, 1));
+        fr.setPower(Range.clip((horizontal - vertical - turn)*powermultiplier, -1, 1));
+        bl.setPower(Range.clip((horizontal - vertical + turn)*powermultiplier, -1, 1));
+        br.setPower(Range.clip((horizontal + vertical - turn)*powermultiplier, -1, 1));
     }
 }
