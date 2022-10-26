@@ -38,7 +38,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 
-@TeleOp(name="drift like them beans", group="Linear Opmode")
+@TeleOp(name="color_testing", group="Linear Opmode")
 public class color_testing extends LinearOpMode {
 
     private ElapsedTime runtime = new ElapsedTime();
