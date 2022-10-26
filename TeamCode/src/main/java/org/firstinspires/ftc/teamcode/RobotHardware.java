@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
-
+import com.qualcomm.robotcore.hardware.ColorSensor;
 public class RobotHardware {
     // todo: fix these shitty constants. Will this still be a problem during mecanum wheels?
     // i sure hope not! -Peat
@@ -40,63 +40,34 @@ public class RobotHardware {
     public DcMotor BR;
     public DcMotor BL;
 
-    public DcMotor arm;
-    public DcMotor arm2;
-    public DcMotor sweeper;
-    public DcMotor carousel;
-    public Servo armEnd;
-
+    public ColorSensor color_sensor;
     public RobotHardware(HardwareMap hardwareMap) {
         FR  = hardwareMap.get(DcMotor.class, "FR");
         FL = hardwareMap.get(DcMotor.class, "FL");
         BR = hardwareMap.get(DcMotor.class, "BR");
         BL = hardwareMap.get(DcMotor.class, "BL");
-        arm = hardwareMap.get(DcMotor.class, "arm");
-        arm2 = hardwareMap.get(DcMotor.class,"arm2");
-        sweeper = hardwareMap.get(DcMotor.class,"sweeper");
-        armEnd = hardwareMap.get(Servo.class,"servo");
-        carousel = hardwareMap.get(DcMotor.class,"carousel");
-
+        color_sensor = hardwareMap.colorSensor.get("color");
         FR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         FL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         BR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         BL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        arm2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        sweeper.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        carousel.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         FR.setZeroPowerBehavior(BRAKE);
         FL.setZeroPowerBehavior(BRAKE);
         BR.setZeroPowerBehavior(BRAKE);
         BL.setZeroPowerBehavior(BRAKE);
-        //arm.setZeroPowerBehavior(BRAKE);
-        //arm2.setZeroPowerBehavior(BRAKE);
-        sweeper.setZeroPowerBehavior(BRAKE);
-        carousel.setZeroPowerBehavior(BRAKE);
-
-        arm.setTargetPosition(0);
-        arm2.setTargetPosition(0);
 
         //makes accuracy remotely possible
         FR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         FL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         BR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         BL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        sweeper.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        arm2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        carousel.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
 
         FR.setDirection(DcMotorSimple.Direction.FORWARD);
         FL.setDirection(DcMotorSimple.Direction.REVERSE);
         BR.setDirection(DcMotorSimple.Direction.FORWARD);
         BL.setDirection(DcMotorSimple.Direction.REVERSE);
-        arm.setDirection(DcMotorSimple.Direction.FORWARD);
-        arm2.setDirection(DcMotorSimple.Direction.FORWARD);
-        sweeper.setDirection(DcMotorSimple.Direction.FORWARD);
-        carousel.setDirection(DcMotorSimple.Direction.FORWARD);
+
     }
 
     // moved away from constants for testing purposes

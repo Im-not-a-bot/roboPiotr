@@ -72,37 +72,37 @@ public class BoxBotDriver extends LinearOpMode {
 
 
 
-            if (gamepad1.dpad_left){inc--;
-                robot.arm.setTargetPosition(inc);
-                robot.arm2.setTargetPosition(-inc);
-                robot.arm.setPower(1);
-                robot.arm2.setPower(1);}
-            else if (gamepad1.dpad_right){inc++;
-                robot.arm.setTargetPosition(inc);
-                robot.arm2.setTargetPosition(-inc);
-                robot.arm.setPower(1);
-                robot.arm2.setPower(1);}
+            //if (gamepad1.dpad_left){inc--;
+            //    robot.arm.setTargetPosition(inc);
+             //   robot.arm2.setTargetPosition(-inc);
+            //    robot.arm.setPower(1);
+            //    robot.arm2.setPower(1);}
+            //else if (gamepad1.dpad_right){inc++;
+            //    robot.arm.setTargetPosition(inc);
+             //   robot.arm2.setTargetPosition(-inc);
+             //   robot.arm.setPower(1);
+            //    robot.arm2.setPower(1);}
 
 
-            if (gamepad1.left_bumper) robot.carousel.setPower(1);
-            else if (gamepad1.right_bumper) robot.carousel.setPower(-1);
-            else robot.carousel.setPower(0);
+          //  if (gamepad1.left_bumper) robot.carousel.setPower(1);
+           // else if (gamepad1.right_bumper) robot.carousel.setPower(-1);
+            //else robot.carousel.setPower(0);
 
-            if (gamepad1.b) robot.sweeper.setPower(1);
-            else robot.sweeper.setPower(0);
-
-            if (gamepad1.x) robot.armEnd.setPosition(0.75);
-            else if (gamepad1.y) robot.armEnd.setPosition(-0.75);
-            else robot.armEnd.setPosition(0);
-
-            // Show the elapsed game time and wheel power.
-            telemetry.addData("Status", "Run Time: " + runtime.toString());
-            telemetry.addData("Wheel Power", "FL (%.2f), FR (%.2f), BL (%.2f), BR (%.2f)", robot.FL.getPower(), robot.FR.getPower(),robot.BL.getPower(),robot.BR.getPower());
-            telemetry.addData("Arm target pos", inc);
-            telemetry.addData("Arm actual pos", robot.arm.getCurrentPosition());
-            telemetry.addData("Carousel Power", robot.carousel.getPower());
-            telemetry.addData("Sweeper Power", robot.sweeper.getPower());
-            telemetry.update();
+//            if (gamepad1.b) robot.sweeper.setPower(1);
+//            else robot.sweeper.setPower(0);
+//
+//            if (gamepad1.x) robot.armEnd.setPosition(0.75);
+//            else if (gamepad1.y) robot.armEnd.setPosition(-0.75);
+//            else robot.armEnd.setPosition(0);
+//
+//            // Show the elapsed game time and wheel power.
+//            telemetry.addData("Status", "Run Time: " + runtime.toString());
+//            telemetry.addData("Wheel Power", "FL (%.2f), FR (%.2f), BL (%.2f), BR (%.2f)", robot.FL.getPower(), robot.FR.getPower(),robot.BL.getPower(),robot.BR.getPower());
+//            telemetry.addData("Arm target pos", inc);
+//            telemetry.addData("Arm actual pos", robot.arm.getCurrentPosition());
+//            telemetry.addData("Carousel Power", robot.carousel.getPower());
+//            telemetry.addData("Sweeper Power", robot.sweeper.getPower());
+//            telemetry.update();
         }
     }
 }
