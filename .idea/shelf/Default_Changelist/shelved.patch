@@ -1,0 +1,186 @@
+Index: TeamCode/src/main/java/org/firstinspires/ftc/teamcode/RobotHardware.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package org.firstinspires.ftc.teamcode;\r\n\r\nimport static com.qualcomm.robotcore.hardware.DcMotor.ZeroPowerBehavior.BRAKE;\r\n\r\nimport static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;\r\n\r\nimport com.qualcomm.robotcore.hardware.DcMotor;\r\nimport com.qualcomm.robotcore.hardware.DcMotorSimple;\r\nimport com.qualcomm.robotcore.hardware.HardwareMap;\r\nimport com.qualcomm.robotcore.hardware.CRServo;\r\nimport com.qualcomm.robotcore.hardware.Servo;\r\nimport com.qualcomm.robotcore.util.Range;\r\n\r\npublic class RobotHardware {\r\n    // todo: fix these shitty constants. Will this still be a problem during mecanum wheels?\r\n    // i sure hope not! -Peat\r\n\r\n    // pie in the sky: ML with camera\r\n    // ^^ ok george, but i might get my lazy ass to work over break\r\n\r\n    // coding for mecanum and linear extruder / claw\r\n    // consistent abstractions (turning, moving)\r\n    // anything else?\r\n\r\n    // ^^ yes. there is a definite lack of shitty variable names such as \"beans\"\r\n\r\n    final public static double ONE_METER = 6300; // guess and check lmao\r\n    final public static double ONE_CENTIMETER =  630;\r\n\r\n    final public static double CM =1;\r\n    final public static double M=100;\r\n    final public static double FULL_ROBOTATION = 240;\r\n    final public static double ONE_DEGREE = FULL_ROBOTATION / 360;\r\n\r\n\r\n    final static double MAX_VELOCITY = (ONE_CENTIMETER * 12) / (2 * Math.sqrt(2));\r\n\r\n    public DcMotor FR;\r\n    public DcMotor FL;\r\n    public DcMotor BR;\r\n    public DcMotor BL;\r\n\r\n    public DcMotor arm;\r\n    public DcMotor arm2;\r\n    public DcMotor sweeper;\r\n    public DcMotor carousel;\r\n    public Servo armEnd;\r\n\r\n    public RobotHardware(HardwareMap hardwareMap) {\r\n        FR  = hardwareMap.get(DcMotor.class, \"FR\");\r\n        FL = hardwareMap.get(DcMotor.class, \"FL\");\r\n        BR = hardwareMap.get(DcMotor.class, \"BR\");\r\n        BL = hardwareMap.get(DcMotor.class, \"BL\");\r\n        arm = hardwareMap.get(DcMotor.class, \"arm\");\r\n        arm2 = hardwareMap.get(DcMotor.class,\"arm2\");\r\n        sweeper = hardwareMap.get(DcMotor.class,\"sweeper\");\r\n        armEnd = hardwareMap.get(Servo.class,\"servo\");\r\n        carousel = hardwareMap.get(DcMotor.class,\"carousel\");\r\n\r\n        FR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);\r\n        FL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);\r\n        BR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);\r\n        BL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);\r\n        arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);\r\n        arm2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);\r\n        sweeper.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);\r\n        carousel.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);\r\n\r\n        FR.setZeroPowerBehavior(BRAKE);\r\n        FL.setZeroPowerBehavior(BRAKE);\r\n        BR.setZeroPowerBehavior(BRAKE);\r\n        BL.setZeroPowerBehavior(BRAKE);\r\n        //arm.setZeroPowerBehavior(BRAKE);\r\n        //arm2.setZeroPowerBehavior(BRAKE);\r\n        sweeper.setZeroPowerBehavior(BRAKE);\r\n        carousel.setZeroPowerBehavior(BRAKE);\r\n\r\n        arm.setTargetPosition(0);\r\n        arm2.setTargetPosition(0);\r\n\r\n        //makes accuracy remotely possible\r\n        FR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);\r\n        FL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);\r\n        BR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);\r\n        BL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);\r\n        sweeper.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);\r\n        arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);\r\n        arm2.setMode(DcMotor.RunMode.RUN_TO_POSITION);\r\n        carousel.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);\r\n\r\n\r\n        FR.setDirection(DcMotorSimple.Direction.FORWARD);\r\n        FL.setDirection(DcMotorSimple.Direction.REVERSE);\r\n        BR.setDirection(DcMotorSimple.Direction.FORWARD);\r\n        BL.setDirection(DcMotorSimple.Direction.REVERSE);\r\n        arm.setDirection(DcMotorSimple.Direction.FORWARD);\r\n        arm2.setDirection(DcMotorSimple.Direction.FORWARD);\r\n        sweeper.setDirection(DcMotorSimple.Direction.FORWARD);\r\n        carousel.setDirection(DcMotorSimple.Direction.FORWARD);\r\n    }\r\n\r\n    public void encoderDrive(double distanceX, double distanceY, double turn, double power, double unit) {\r\n        double vertical = -distanceX;\r\n        double horizontal = -distanceY;\r\n\r\n        int frontLeftPosition = (int) (FL.getCurrentPosition() + ONE_CENTIMETER * vertical - ONE_CENTIMETER * horizontal + ONE_DEGREE * turn);\r\n        int frontRightPosition = (int) (FR.getCurrentPosition() + ONE_CENTIMETER * vertical + ONE_CENTIMETER * horizontal - ONE_DEGREE * turn);\r\n        int backLeftPosition = (int) (BL.getCurrentPosition() + ONE_CENTIMETER * vertical + ONE_CENTIMETER * horizontal + ONE_DEGREE * turn);\r\n        int backRightPosition = (int) (BR.getCurrentPosition() + ONE_CENTIMETER * vertical - ONE_CENTIMETER * horizontal - ONE_DEGREE * turn);\r\n\r\n        FL.setTargetPosition(frontLeftPosition);\r\n        FR.setTargetPosition(frontRightPosition);\r\n        BL.setTargetPosition(backLeftPosition);\r\n        BR.setTargetPosition(backRightPosition);\r\n\r\n        FL.setMode(DcMotor.RunMode.RUN_TO_POSITION);\r\n        FR.setMode(DcMotor.RunMode.RUN_TO_POSITION);\r\n        BL.setMode(DcMotor.RunMode.RUN_TO_POSITION);\r\n        BR.setMode(DcMotor.RunMode.RUN_TO_POSITION);\r\n\r\n        FL.setPower(power);\r\n        FR.setPower(power);\r\n        BL.setPower(power);\r\n        BR.setPower(power);\r\n\r\n        while (FL.isBusy() && FR.isBusy() && BL.isBusy() && BR.isBusy()) {\r\n            /*\r\n            telemetry.addData(\"Target Encoders\", \"FL (%d), FR (%d), BL (%d), BR (%d)\", frontLeftPosition, frontRightPosition, backLeftPosition, backRightPosition);\r\n            telemetry.addData(\"Current Encoders\", \"FL (%d), FR (%d), BL (%d), BR (%d)\", FL.getCurrentPosition(), FR.getCurrentPosition(), BL.getCurrentPosition(), BR.getCurrentPosition());\r\n            telemetry.update();\r\n            ssshhhhhh */\r\n            try {\r\n                Thread.sleep(1);\r\n            } catch (InterruptedException e) {\r\n                e.printStackTrace();\r\n            }\r\n        }\r\n\r\n        FL.setPower(0);\r\n        FR.setPower(0);\r\n        BL.setPower(0);\r\n        BR.setPower(0);\r\n\r\n        FL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);\r\n        FR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);\r\n        BL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);\r\n        BR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);\r\n    }\r\n\r\n    // encoderDrive, but shitty^TM\r\n    public void strafe(int cm, double rd, double pow) {\r\n        rd %= (2 * Math.PI);\r\n        double x = Math.cos(rd); // trig functions take radians\r\n        double y = Math.sin(rd);\r\n\r\n        double frontLeftPower = Range.clip(y + x, -1 ,1); // don't think we need turn if we just need to strafe\r\n        double frontRightPower = Range.clip(y - x, -1, 1);\r\n        double backLeftPower = Range.clip(y - x, -1, 1);\r\n        double backRightPower = Range.clip(y + x, -1, 1);\r\n\r\n        if (Math.abs(frontLeftPower) > 1 || Math.abs(backLeftPower) > 1 || Math.abs(frontRightPower) > 1 || Math.abs(backRightPower) > 1 ) {\r\n            // Find the largest power\r\n            double max;\r\n            max = Math.max(Math.abs(frontLeftPower), Math.abs(backLeftPower));\r\n            max = Math.max(Math.abs(frontRightPower), max);\r\n            max = Math.max(Math.abs(backRightPower), max);\r\n\r\n            // Divide everything by max (it's positive so we don't need to worry\r\n            // about signs)\r\n            frontLeftPower *= pow/max; // If you don't wanna go vrooom vroom\r\n            backLeftPower *= pow/max;\r\n            frontRightPower *= pow/max;\r\n            backRightPower *= pow/max;\r\n        }\r\n\r\n        rd = (rd <= Math.PI) ? rd : rd - Math.PI; // this is because I'm bad at math and equation below works for 0 <= x <= pi\r\n\r\n        double actual_v = (2 * Math.sqrt(2)) / (Math.abs(Math.cos(rd)) + Math.sin(rd)); // See my bs math\r\n\r\n        long time = (long)(cm / (MAX_VELOCITY * actual_v));\r\n\r\n        FL.setPower(frontLeftPower);\r\n        FR.setPower(frontRightPower);\r\n        BL.setPower(backLeftPower);\r\n        BR.setPower(backRightPower);\r\n\r\n       try{\r\n           Thread.sleep(time);\r\n       } catch (Exception e){\r\n           e.printStackTrace();\r\n       }\r\n\r\n        FL.setPower(0);\r\n        FR.setPower(0);\r\n        BL.setPower(0);\r\n        BR.setPower(0);\r\n        // fast_v / actual_v = constant to multiply time by\r\n        /*\r\n        Forward velocity is 2sqrt(2) * unit_v, basically the y-component of each mech. wheel\r\n        strafing at 45 deg to x-axis is 2*unit_v\r\n        strafing at 0 deg is 2sqrt(2) * unit_v\r\n        strafing at 30 deg to x-axis is 2.689 * unit_v\r\n\r\n        ostensibly, the wheels are at a 45 deg angle so that horizontal and vertical movement are the same\r\n\r\n         */\r\n    }\r\n    /*\r\n    void turn(double deg, double power) {\r\n        move(0, deg, power);\r\n    }\r\n\r\n     */\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/TeamCode/src/main/java/org/firstinspires/ftc/teamcode/RobotHardware.java b/TeamCode/src/main/java/org/firstinspires/ftc/teamcode/RobotHardware.java
+--- a/TeamCode/src/main/java/org/firstinspires/ftc/teamcode/RobotHardware.java	(revision 09d64584fa0a1cc7289f35d528785c7038092d65)
++++ b/TeamCode/src/main/java/org/firstinspires/ftc/teamcode/RobotHardware.java	(date 1639231932814)
+@@ -24,13 +24,13 @@
+ 
+     // ^^ yes. there is a definite lack of shitty variable names such as "beans"
+ 
+-    final public static double ONE_METER = 6300; // guess and check lmao
+-    final public static double ONE_CENTIMETER =  630;
++    final public static double ONE_METER = 5050; // guess and check lmao
++    final public static double ONE_CENTIMETER =  50.5;
+ 
+     final public static double CM =1;
+     final public static double M=100;
+     final public static double FULL_ROBOTATION = 240;
+-    final public static double ONE_DEGREE = FULL_ROBOTATION / 360;
++    final public static double ONE_DEGREE=20;
+ 
+ 
+     final static double MAX_VELOCITY = (ONE_CENTIMETER * 12) / (2 * Math.sqrt(2));
+@@ -124,11 +124,6 @@
+         BR.setPower(power);
+ 
+         while (FL.isBusy() && FR.isBusy() && BL.isBusy() && BR.isBusy()) {
+-            /*
+-            telemetry.addData("Target Encoders", "FL (%d), FR (%d), BL (%d), BR (%d)", frontLeftPosition, frontRightPosition, backLeftPosition, backRightPosition);
+-            telemetry.addData("Current Encoders", "FL (%d), FR (%d), BL (%d), BR (%d)", FL.getCurrentPosition(), FR.getCurrentPosition(), BL.getCurrentPosition(), BR.getCurrentPosition());
+-            telemetry.update();
+-            ssshhhhhh */
+             try {
+                 Thread.sleep(1);
+             } catch (InterruptedException e) {
+@@ -148,6 +143,7 @@
+     }
+ 
+     // encoderDrive, but shitty^TM
++    // bruh YTF would anyone use this?
+     public void strafe(int cm, double rd, double pow) {
+         rd %= (2 * Math.PI);
+         double x = Math.cos(rd); // trig functions take radians
+Index: TeamCode/src/main/java/org/firstinspires/ftc/teamcode/BoxBotDriver.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>/* Copyright (c) 2017 FIRST. All rights reserved.\r\n *\r\n * Redistribution and use in source and binary forms, with or without modification,\r\n * are permitted (subject to the limitations in the disclaimer below) provided that\r\n * the following conditions are met:\r\n *\r\n * Redistributions of source code must retain the above copyright notice, this list\r\n * of conditions and the following disclaimer.\r\n *\r\n * Redistributions in binary form must reproduce the above copyright notice, this\r\n * list of conditions and the following disclaimer in the documentation and/or\r\n * other materials provided with the distribution.\r\n *\r\n * Neither the name of FIRST nor the names of its contributors may be used to endorse or\r\n * promote products derived from this software without specific prior written permission.\r\n *\r\n * NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS\r\n * LICENSE. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS\r\n * \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,\r\n * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE\r\n * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE\r\n * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL\r\n * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR\r\n * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER\r\n * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,\r\n * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE\r\n * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.\r\n */\r\n\r\npackage org.firstinspires.ftc.teamcode;\r\n\r\nimport com.qualcomm.robotcore.eventloop.opmode.Disabled;\r\nimport com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;\r\nimport com.qualcomm.robotcore.eventloop.opmode.TeleOp;\r\nimport com.qualcomm.robotcore.hardware.DcMotor;\r\nimport com.qualcomm.robotcore.robot.Robot;\r\nimport com.qualcomm.robotcore.util.ElapsedTime;\r\nimport com.qualcomm.robotcore.util.Range;\r\n\r\n\r\n\r\n@TeleOp(name=\"Boxy Driver Op\", group=\"Linear Opmode\")\r\npublic class BoxBotDriver extends LinearOpMode {\r\n\r\n    private ElapsedTime runtime = new ElapsedTime();\r\n\r\n    @Override\r\n    public void runOpMode() {\r\n\r\n        int inc=0;\r\n\r\n        telemetry.addData(\"Status\", \"Initialized\");\r\n        telemetry.update();\r\n\r\n        RobotHardware robot = new RobotHardware(hardwareMap);\r\n\r\n        // Wait for the game to start (driver presses PLAY)\r\n        waitForStart();\r\n        runtime.reset();\r\n\r\n        // run until the end of the match (driver presses STOP)\r\n        while (opModeIsActive()) {\r\n\r\n            double vertical = -gamepad1.left_stick_x;\r\n            double horizontal = -gamepad1.left_stick_y;\r\n            double turn = gamepad1.right_stick_x;\r\n            robot.FL.setPower(Range.clip(vertical+horizontal+turn,-1,1));\r\n            robot.FR.setPower(Range.clip(vertical-horizontal-turn,-1,1));\r\n            robot.BL.setPower(Range.clip(vertical-horizontal+turn,-1,1));\r\n            robot.BR.setPower(Range.clip(vertical+horizontal-turn,-1,1));\r\n\r\n\r\n\r\n\r\n            if (gamepad1.dpad_left){inc--;\r\n                robot.arm.setTargetPosition(inc);\r\n                robot.arm2.setTargetPosition(-inc);\r\n                robot.arm.setPower(1);\r\n                robot.arm2.setPower(1);}\r\n            else if (gamepad1.dpad_right){inc++;\r\n                robot.arm.setTargetPosition(inc);\r\n                robot.arm2.setTargetPosition(-inc);\r\n                robot.arm.setPower(1);\r\n                robot.arm2.setPower(1);}\r\n\r\n\r\n            if (gamepad1.left_bumper) robot.carousel.setPower(1);\r\n            else if (gamepad1.right_bumper) robot.carousel.setPower(-1);\r\n            else robot.carousel.setPower(0);\r\n\r\n            if (gamepad1.b) robot.sweeper.setPower(1);\r\n            else robot.sweeper.setPower(0);\r\n\r\n            if (gamepad1.x) robot.armEnd.setPosition(0.75);\r\n            else if (gamepad1.y) robot.armEnd.setPosition(-0.75);\r\n            else robot.armEnd.setPosition(0);\r\n\r\n            // Show the elapsed game time and wheel power.\r\n            telemetry.addData(\"Status\", \"Run Time: \" + runtime.toString());\r\n            telemetry.addData(\"Wheel Power\", \"FL (%.2f), FR (%.2f), BL (%.2f), BR (%.2f)\", robot.FL.getPower(), robot.FR.getPower(),robot.BL.getPower(),robot.BR.getPower());\r\n            telemetry.addData(\"Arm target pos\", inc);\r\n            telemetry.addData(\"Arm actual pos\", robot.arm.getCurrentPosition());\r\n            telemetry.addData(\"Carousel Power\", robot.carousel.getPower());\r\n            telemetry.addData(\"Sweeper Power\", robot.sweeper.getPower());\r\n            telemetry.update();\r\n        }\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/TeamCode/src/main/java/org/firstinspires/ftc/teamcode/BoxBotDriver.java b/TeamCode/src/main/java/org/firstinspires/ftc/teamcode/BoxBotDriver.java
+--- a/TeamCode/src/main/java/org/firstinspires/ftc/teamcode/BoxBotDriver.java	(revision 09d64584fa0a1cc7289f35d528785c7038092d65)
++++ b/TeamCode/src/main/java/org/firstinspires/ftc/teamcode/BoxBotDriver.java	(date 1639229258136)
+@@ -88,12 +88,10 @@
+             else if (gamepad1.right_bumper) robot.carousel.setPower(-1);
+             else robot.carousel.setPower(0);
+ 
+-            if (gamepad1.b) robot.sweeper.setPower(1);
++            if (gamepad1.x) robot.sweeper.setPower(1);
+             else robot.sweeper.setPower(0);
+ 
+-            if (gamepad1.x) robot.armEnd.setPosition(0.75);
+-            else if (gamepad1.y) robot.armEnd.setPosition(-0.75);
+-            else robot.armEnd.setPosition(0);
++            robot.armEnd.setPosition(150*gamepad1.right_trigger-75);
+ 
+             // Show the elapsed game time and wheel power.
+             telemetry.addData("Status", "Run Time: " + runtime.toString());
+Index: TeamCode/src/main/java/org/firstinspires/ftc/teamcode/autotest.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/TeamCode/src/main/java/org/firstinspires/ftc/teamcode/autotest.java b/TeamCode/src/main/java/org/firstinspires/ftc/teamcode/autonomouseRed.java
+rename from TeamCode/src/main/java/org/firstinspires/ftc/teamcode/autotest.java
+rename to TeamCode/src/main/java/org/firstinspires/ftc/teamcode/autonomouseRed.java
+--- a/TeamCode/src/main/java/org/firstinspires/ftc/teamcode/autotest.java	(revision 09d64584fa0a1cc7289f35d528785c7038092d65)
++++ b/TeamCode/src/main/java/org/firstinspires/ftc/teamcode/autonomouseRed.java	(date 1639234550285)
+@@ -11,8 +11,8 @@
+ import com.qualcomm.robotcore.util.Range;
+ 
+ 
+-@Autonomous(name = "autonomous", group = "Autonomous")
+-public class autotest extends LinearOpMode {
++@Autonomous(name = "autonomous red", group = "Autonomous")
++public class autonomouseRed extends LinearOpMode {
+     private ElapsedTime runtime = new ElapsedTime();
+ 
+     RobotHardware r;
+@@ -20,8 +20,30 @@
+     public void runOpMode() {
+         waitForStart();
+ 
++            //r means robot
+         r=new RobotHardware(hardwareMap);
+-        r.encoderDrive(0,10,0,1,r.CM);
++        r.encoderDrive(0,-55,0,1,r.CM);
++        r.encoderDrive(20,0,0,1,r.CM);
++        r.arm.setTargetPosition(45);
++        r.arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
++        r.arm.setTargetPosition(90);
++        r.arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
++        r.arm.setPower(1);
++        try {
++            Thread.sleep(3000);
++        } catch (InterruptedException e) {
++            e.printStackTrace();
++        }
++        r.encoderDrive(0,0,90,1,r.CM);
++        r.encoderDrive(-50,0,0,1,r.CM);
++        r.encoderDrive(0,-102, 20,1,r.CM);
++        r.carousel.setPower(1);
++        try {
++            Thread.sleep(3000);
++        } catch (InterruptedException e) {
++            e.printStackTrace();
++        }
++        r.carousel.setPower(0);
+ 
+     }
+ }
+\ No newline at end of file
+Index: TeamCode/src/main/java/org/firstinspires/ftc/teamcode/autonomouseBlue.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/TeamCode/src/main/java/org/firstinspires/ftc/teamcode/autonomouseBlue.java b/TeamCode/src/main/java/org/firstinspires/ftc/teamcode/autonomouseBlue.java
+new file mode 100644
+--- /dev/null	(date 1639234550293)
++++ b/TeamCode/src/main/java/org/firstinspires/ftc/teamcode/autonomouseBlue.java	(date 1639234550293)
+@@ -0,0 +1,49 @@
++package org.firstinspires.ftc.teamcode;
++
++import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
++import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
++import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
++import com.qualcomm.robotcore.hardware.DcMotor;
++import com.qualcomm.robotcore.hardware.DcMotorSimple;
++import com.qualcomm.robotcore.hardware.HardwareMap;
++import com.qualcomm.robotcore.hardware.Servo;
++import com.qualcomm.robotcore.util.ElapsedTime;
++import com.qualcomm.robotcore.util.Range;
++
++
++@Autonomous(name = "autonomous blue", group = "Autonomous")
++public class autonomouseBlue extends LinearOpMode {
++    private ElapsedTime runtime = new ElapsedTime();
++
++    RobotHardware r;
++    @Override
++    public void runOpMode() {
++        waitForStart();
++
++        //r means robot
++        r=new RobotHardware(hardwareMap);
++        r.encoderDrive(0,-55,0,1,r.CM);
++        r.encoderDrive(20,0,0,1,r.CM);
++        r.arm.setTargetPosition(45);
++        r.arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
++        r.arm.setTargetPosition(90);
++        r.arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
++        r.arm.setPower(1);
++        try {
++            Thread.sleep(3000);
++        } catch (InterruptedException e) {
++            e.printStackTrace();
++        }
++        r.encoderDrive(0,0,90,1,r.CM);
++        r.encoderDrive(-50,0,0,1,r.CM);
++        r.encoderDrive(0,-102, 20,1,r.CM);
++        r.carousel.setPower(1);
++        try {
++            Thread.sleep(3000);
++        } catch (InterruptedException e) {
++            e.printStackTrace();
++        }
++        r.carousel.setPower(0);
++
++    }
++}
+\ No newline at end of file
